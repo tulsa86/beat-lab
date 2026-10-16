@@ -43,8 +43,114 @@ function renderPads(){const s=settings();$('pads').replaceChildren();padButtons.
 async function audio(){if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('This browser does not support audio');ctx=new AC();master=ctx.createGain();master.gain.value=.66;const limiter=ctx.createDynamicsCompressor();master.connect(limiter);limiter.connect(ctx.destination);noise=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const d=noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}await ctx.resume()}
 function osc(freq,t,d,type='sine',vol=.25,slide=null,dest=master){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(Math.max(1,freq),t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(1,slide),t+Math.min(d*.7,.3));g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.001,vol),t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(dest);o.start(t);o.stop(t+d+.02)}
 function hiss(t,d,filter,cut,vol){const o=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.buffer=noise;f.type=filter;f.frequency.value=cut;g.gain.setValueAtTime(Math.max(.001,vol),t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(f);f.connect(g);g.connect(master);o.start(t);o.stop(t+d+.02)}
-function playVoice(s,p,t,d=.25,v=.8){const kind=s.instrument;if(kind==='808'||kind==='acoustic'){const low=kind==='808';switch(p){case 0:osc(low?155:115,t,low?.48:.26,'sine',.85*v,low?38:49);break;case 1:hiss(t,.18,'highpass',1450,.45*v);osc(195,t,.11,'triangle',.25*v,115);break;case 2:hiss(t,.065,'highpass',6800,.23*v);break;case 3:hiss(t,.32,'highpass',5800,.2*v);break;case 4:hiss(t,.17,'bandpass',1800,.5*v);break;case 5:osc(630,t,.07,'triangle',.32*v,280);break;case 6:osc(565,t,.2,'square',.12*v);osc(845,t,.17,'square',.08*v);break;case 7:osc(175,t,.28,'sine',.4*v,85);break;case 8:osc(260,t,.2,'sine',.35*v,150);break;case 9:hiss(t,.1,'highpass',4900,.18*v);break;case 10:hiss(t,.72,'highpass',4200,.21*v);break;case 11:osc(1150,t,.09,'square',.15*v);break;case 12:hiss(t,.13,'bandpass',950,.35*v);break;case 13:osc(370,t,.19,'triangle',.3*v,170);break;case 14:osc(850,t,.25,'sawtooth',.16*v,85);break;case 15:osc(100,t,.7,'sine',.7*v,32);break}return}
-const hz=440*2**((getMidi(s,p)-69)/12),dur=Math.min(2,Math.max(.09,d));switch(kind){case 'bass':osc(hz/2,t,dur,'sawtooth',.28*v);osc(hz/2,t,dur*.9,'sine',.3*v);break;case 'sub':osc(hz/2,t,Math.max(.38,dur),'sine',.65*v,hz/2*.9);break;case 'keys':osc(hz,t,dur,'triangle',.3*v);osc(hz*2,t,dur*.65,'sine',.09*v);break;case 'piano':osc(hz,t,Math.min(1.3,dur+.25),'triangle',.26*v);osc(hz*2,t,Math.min(.5,dur),'sine',.07*v);break;case 'synth':osc(hz,t,dur,'sawtooth',.22*v);osc(hz*1.005,t,dur,'triangle',.17*v);break;case 'bell':osc(hz,t,Math.min(1.5,dur+.4),'sine',.31*v);osc(hz*2.996,t,Math.min(.65,dur),'sine',.11*v);break;case 'guitar':osc(hz,t,Math.min(.65,dur+.08),'triangle',.3*v);osc(hz*2,t,Math.min(.3,dur),'sine',.09*v);break;case 'organ':osc(hz,t,dur,'sine',.27*v);osc(hz*2,t,dur,'sine',.12*v);osc(hz*3,t,dur,'sine',.06*v);break}}
+// Distinct Web Audio voice designs. Everything runs offline, no samples or accounts.
+function shaped(freq,t,d,opts={}){
+  const o=ctx.createOscillator(),g=ctx.createGain(),f=ctx.createBiquadFilter();
+  const length=Math.max(.08,Math.min(3.5,d)),attack=opts.attack??.008,decay=opts.decay??.25;
+  o.type=opts.wave||'sine';o.frequency.setValueAtTime(freq,t);
+  if(opts.detune)o.detune.value=opts.detune;
+  f.type=opts.filter||'lowpass';f.frequency.setValueAtTime(opts.cutoff||17000,t);
+  if(opts.sweep)f.frequency.exponentialRampToValueAtTime(Math.max(80,opts.sweep),t+Math.min(length,.6));
+  f.Q.value=opts.q||.5;
+  const peak=Math.max(.0001,Math.min(.85,opts.vol||.2));
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+Math.max(.003,attack));
+  if(opts.sustain!==undefined){
+    g.gain.exponentialRampToValueAtTime(Math.max(.0001,peak*opts.sustain),t+Math.min(length*.65,Math.max(attack+.02,decay)));
+    g.gain.setValueAtTime(Math.max(.0001,peak*opts.sustain),t+Math.max(attack+.02,length-.09));
+  }else g.gain.exponentialRampToValueAtTime(Math.max(.0001,peak*.045),t+length*.8);
+  g.gain.exponentialRampToValueAtTime(.0001,t+length);
+  o.connect(f);f.connect(g);g.connect(master);o.start(t);o.stop(t+length+.03);
+}
+function electricKey(hz,t,v){
+  // Tine-like FM electric piano: attack chime, soft vibrating body and rapid decay.
+  const duration=1.3,carrier=ctx.createOscillator(),mod=ctx.createOscillator();
+  const depth=ctx.createGain(),gain=ctx.createGain(),tone=ctx.createBiquadFilter();
+  carrier.type='sine';carrier.frequency.value=hz;
+  mod.type='sine';mod.frequency.value=hz*7;
+  depth.gain.setValueAtTime(hz*1.8,t);
+  depth.gain.exponentialRampToValueAtTime(.001,t+.22);
+  mod.connect(depth);depth.connect(carrier.frequency);
+  tone.type='lowpass';tone.frequency.value=4300;
+  gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.29*v,t+.004);
+  gain.gain.exponentialRampToValueAtTime(.0001,t+duration);
+  carrier.connect(tone);tone.connect(gain);gain.connect(master);
+  carrier.start(t);mod.start(t);carrier.stop(t+duration+.02);mod.stop(t+duration+.02);
+}
+function stringPluck(hz,t,v){
+  // Karplus-Strong plucked string: short noisy pick excites a tuned feedback delay.
+  const c=ctx,period=1/hz,excitation=c.createBufferSource(),n=Math.max(2,Math.ceil(c.sampleRate*.035));
+  const buffer=c.createBuffer(1,n,c.sampleRate),data=buffer.getChannelData(0);
+  for(let i=0;i<n;i++)data[i]=(Math.random()*2-1)*Math.exp(-i/n*6);
+  excitation.buffer=buffer;
+  const delay=c.createDelay(.15),feedback=c.createGain(),damp=c.createBiquadFilter(),out=c.createGain();
+  delay.delayTime.value=period;feedback.gain.value=.975;
+  damp.type='lowpass';damp.frequency.value=Math.min(5200,Math.max(900,hz*7));
+  out.gain.value=.42*v;
+  excitation.connect(delay);delay.connect(damp);damp.connect(feedback);feedback.connect(delay);
+  delay.connect(out);out.connect(master);
+  excitation.start(t);excitation.stop(t+.035);
+  // Kill the feedback after a short musical note, then disconnect to avoid CPU leaks.
+  feedback.gain.setValueAtTime(.975,t);feedback.gain.setTargetAtTime(.0001,t+.65,.12);
+  excitation.onended=()=>{setTimeout(()=>{try{excitation.disconnect();delay.disconnect();damp.disconnect();feedback.disconnect();out.disconnect()}catch{}},1600)};
+}
+function playVoice(s,p,t,d=.25,v=.8){
+  const kind=s.instrument;
+  if(kind==='808'||kind==='acoustic'){
+    const low=kind==='808';
+    if(!low){
+      // Acoustic-style kit has a shorter, punchier kick and a bright noise snare.
+      if(p===0){osc(180,t,.16,'sine',.75*v,55);return}
+      if(p===1){hiss(t,.14,'highpass',2100,.65*v);osc(195,t,.07,'triangle',.18*v,95);return}
+      if(p===2||p===3){hiss(t,p===2?.04:.23,'highpass',9000,.22*v);return}
+    }
+    switch(p){
+      case 0:osc(155,t,.48,'sine',.85*v,38);break;
+      case 1:hiss(t,.18,'highpass',1450,.45*v);osc(195,t,.11,'triangle',.25*v,115);break;
+      case 2:hiss(t,.065,'highpass',6800,.23*v);break;
+      case 3:hiss(t,.32,'highpass',5800,.2*v);break;
+      case 4:hiss(t,.17,'bandpass',1800,.5*v);break;
+      case 5:osc(630,t,.07,'triangle',.32*v,280);break;
+      case 6:osc(565,t,.2,'square',.12*v);osc(845,t,.17,'square',.08*v);break;
+      case 7:osc(175,t,.28,'sine',.4*v,85);break;
+      case 8:osc(260,t,.2,'sine',.35*v,150);break;
+      case 9:hiss(t,.1,'highpass',4900,.18*v);break;
+      case 10:hiss(t,.72,'highpass',4200,.21*v);break;
+      case 11:osc(1150,t,.09,'square',.15*v);break;
+      case 12:hiss(t,.13,'bandpass',950,.35*v);break;
+      case 13:osc(370,t,.19,'triangle',.3*v,170);break;
+      case 14:osc(850,t,.25,'sawtooth',.16*v,85);break;
+      case 15:osc(100,t,.7,'sine',.7*v,32);break;
+    }return;
+  }
+  const hz=440*2**((getMidi(s,p)-69)/12),duration=Math.min(2.2,Math.max(.12,d));
+  switch(kind){
+    case 'bass': // Rounded, nasal, plucky synth-bass with lowpass sweep.
+      shaped(hz/2,t,.42,{wave:'sawtooth',vol:.43*v,cutoff:2200,sweep:240,q:2,decay:.1});
+      shaped(hz/2,t,.32,{wave:'sine',vol:.28*v});break;
+    case 'sub': // Clean long, deep, pitch-dropping 808 sub.
+      osc(hz/4*1.8,t,.65,'sine',.7*v,hz/4);
+      shaped(hz/4,t,.85,{wave:'sine',vol:.45*v});break;
+    case 'keys': // Metallic electric piano tine, noticeably different from plucked guitar.
+      electricKey(hz,t,v);break;
+    case 'piano': // Softer struck piano approximation with several quickly fading harmonics.
+      shaped(hz,t,1.05,{wave:'triangle',vol:.37*v,cutoff:3700,decay:.14});
+      shaped(hz*2,t,.38,{wave:'sine',vol:.12*v});
+      shaped(hz*3,t,.17,{wave:'sine',vol:.075*v});break;
+    case 'synth': // Brassy arcade lead with sliding resonant filter.
+      shaped(hz,t,Math.max(.5,duration),{wave:'sawtooth',vol:.31*v,cutoff:6500,sweep:620,q:5,attack:.015,sustain:.5,decay:.16});
+      shaped(hz*1.003,t,Math.max(.5,duration),{wave:'square',vol:.09*v,cutoff:2200,sustain:.6});break;
+    case 'bell': // Long ringing metallic partials.
+      shaped(hz,t,1.9,{wave:'sine',vol:.32*v,attack:.003});
+      shaped(hz*2.77,t,1.15,{wave:'sine',vol:.15*v,attack:.003});
+      shaped(hz*5.41,t,.7,{wave:'sine',vol:.055*v,attack:.003});break;
+    case 'guitar': // Physical plucked-string algorithm, not the electric-keys oscillator.
+      stringPluck(hz,t,v);break;
+    case 'organ': // Sustained drawbar harmonics with a quick smooth on/off.
+      shaped(hz,t,Math.max(.8,duration),{wave:'sine',vol:.28*v,attack:.045,sustain:.85,decay:.07});
+      shaped(hz*2,t,Math.max(.8,duration),{wave:'sine',vol:.17*v,attack:.045,sustain:.85,decay:.07});
+      shaped(hz*3,t,Math.max(.8,duration),{wave:'sine',vol:.075*v,attack:.045,sustain:.85,decay:.07});break;
+  }
+}
 function quantize(t){return Math.round((t-startTime)/stepDur())}
 function press(p,s){audio().then(()=>{const t=ctx.currentTime;playVoice(s,p,t);voiceEnds.set(p,{time:t,s});if(rec&&!recordPending){const idx=Math.max(0,quantize(t));const at=idx%16;rec.events.push({pad:p,step:at,length:1,velocity:1});voiceEnds.get(p).event=rec.events.at(-1)}tell(rec?'Recording · play your part':'Playing '+padName(s,p))}).catch(e=>tell(e.message))}
 function lift(p){const hold=voiceEnds.get(p);if(!hold)return;if(hold.event&&ctx){hold.event.length=Math.max(1,Math.min(16,Math.round((ctx.currentTime-hold.time)/stepDur())))}voiceEnds.delete(p)}
