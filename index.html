@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#141617"><meta name="description" content="Your first beat starts here. A simple, real music studio in your browser.">
+  <title>Beat Lab — Make something that moves.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23c9f96c'/%3E%3Cpath d='M16 24h8v24h-8zm12-10h8v34h-8zm12 16h8v18h-8z' fill='%23141617'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Beat Lab home"><span class="brand-icon"><i></i><i></i><i></i></span>beat lab<span class="version">1.0</span></a>
+    <span class="header-caption">A little curiosity. A lot of possibility.</span>
+    <button id="help-button" class="text-button"><span aria-hidden="true">ⓘ</span> Quick guide</button>
+  </header>
+  <main>
+    <section class="intro">
+      <div><div class="eyebrow"><span></span> YOUR BROWSER IS YOUR STUDIO</div><h1>Make something<br class="mobile-break"> that moves<span class="accent">.</span></h1><p>No experience needed. Tap a few steps. Find your sound.</p></div>
+      <div class="sound-art" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    </section>
+    <section class="workspace" aria-label="Music studio">
+      <div class="projectbar"><div class="project-name-wrap"><span class="project-dot"></span><input id="project-name" aria-label="Project name" maxlength="60" value="Midnight sketch"><span id="save-status" class="small-label">Unsaved project</span></div><div class="project-actions"><button id="load-button" class="subtle-button">↗ <span>Load</span></button><button id="save-button" class="subtle-button">↓ <span>Save project</span></button></div></div>
+      <div class="transport">
+        <div class="play-group"><button id="play-button" class="play-button"><span id="play-icon" aria-hidden="true">▶︎</span><span id="play-label">Play beat</span></button><button id="stop-button" class="stop-button" aria-label="Stop and return to first step"><span></span></button></div>
+        <div class="tempo"><label for="bpm">TEMPO</label><div><button id="tempo-down" aria-label="Decrease tempo">−</button><input id="bpm" type="number" min="60" max="180" value="108" inputmode="numeric" aria-label="Tempo in beats per minute"><span>BPM</span><button id="tempo-up" aria-label="Increase tempo">+</button></div></div>
+        <div class="loop-label"><span aria-hidden="true">⟳</span><div>1 bar loop<small>16 steps · 4 beats</small></div></div>
+        <button id="surprise-button" class="surprise-button"><span aria-hidden="true">✧</span> Surprise me</button>
+      </div>
+      <div class="playback-info"><span id="audio-status"><span class="status-dot"></span>Ready · tap Play to enable audio</span><span class="step-position" id="step-position">STEP — / 16</span></div>
+
+      <section class="instrument drums" data-instrument="drums">
+        <div class="instrument-heading"><div class="instrument-title"><span class="instrument-icon" aria-hidden="true">▦</span><div><h2>Drums <span class="chip">THE GROOVE</span></h2><p>Tap a step to add a hit. Tap again to remove it.</p></div></div><div class="instrument-tools"><button class="mute-button" data-mute="drums" aria-label="Mute drums" aria-pressed="false">♪</button><label class="volume"><span class="sr-only">Drums volume</span><input type="range" min="0" max="100" value="80" data-volume="drums"><output>80%</output></label><button class="clear-button" data-clear="drums">Clear</button></div></div>
+        <div class="sequence-scroll" tabindex="0" aria-label="Drum steps. Scroll horizontally on small screens."><div class="drum-grid" id="drum-grid"></div></div>
+        <div class="sequence-footer"><span><i></i> Filled steps make a sound</span><span>One row. One sound. Your rhythm.</span></div>
+      </section>
+
+      <div class="tonal-settings"><div><span aria-hidden="true">♮</span><strong>Keep it in key</strong><span class="tonal-description">Every note here sounds good together.</span></div><div class="key-selects"><label for="root">KEY</label><select id="root" aria-label="Musical key"></select><label for="scale">SCALE</label><select id="scale"><option value="minor">Minor · moody</option><option value="major">Major · bright</option><option value="pentatonic">Pentatonic · easy</option></select></div></div>
+
+      <section class="instrument bass" data-instrument="bass">
+        <div class="instrument-heading"><div class="instrument-title"><span class="instrument-icon" aria-hidden="true">≋</span><div><h2>Bass <span class="chip">THE FOUNDATION</span></h2><p>Choose a note, then tap a step to give your beat some depth.</p></div></div><div class="instrument-tools"><button class="mute-button" data-mute="bass" aria-label="Mute bass" aria-pressed="false">♪</button><label class="volume"><span class="sr-only">Bass volume</span><input type="range" min="0" max="100" value="65" data-volume="bass"><output>65%</output></label><button class="clear-button" data-clear="bass">Clear</button></div></div>
+        <div class="note-picker" id="bass-notes" aria-label="Choose bass note"></div><div class="sequence-scroll" tabindex="0" aria-label="Bass steps. Scroll horizontally on small screens."><div class="note-grid" id="bass-grid"></div></div>
+      </section>
+      <section class="instrument melody" data-instrument="melody">
+        <div class="instrument-heading"><div class="instrument-title"><span class="instrument-icon" aria-hidden="true">⌁</span><div><h2>Melody <span class="chip">THE PERSONALITY</span></h2><p>A few little notes can make the whole thing yours.</p></div></div><div class="instrument-tools"><button class="mute-button" data-mute="melody" aria-label="Mute melody" aria-pressed="false">♪</button><label class="volume"><span class="sr-only">Melody volume</span><input type="range" min="0" max="100" value="50" data-volume="melody"><output>50%</output></label><button class="clear-button" data-clear="melody">Clear</button></div></div>
+        <div class="note-picker" id="melody-notes" aria-label="Choose melody note"></div><div class="sequence-scroll" tabindex="0" aria-label="Melody steps. Scroll horizontally on small screens."><div class="note-grid" id="melody-grid"></div></div>
+      </section>
+      <div class="studio-bottom"><span class="local-icon" aria-hidden="true">⌑</span><p>Made by you. Saved on this device.<small>No account. No uploads. Just your ideas.</small></p><button id="new-button" class="text-button">+ New project</button></div>
+    </section>
+    <footer><span class="brand-footer">beat lab <span> / </span> A space to play.</span><span>Headphones on. World off. <span aria-hidden="true">↗</span></span></footer>
+  </main>
+  <dialog id="help-dialog"><div class="dialog-head"><h2>Your first beat, in a minute.</h2><button class="close-dialog" aria-label="Close guide">×</button></div><ol class="guide"><li><strong>Press Play.</strong> Your starter beat is already waiting. Headphones help you hear the bass.</li><li><strong>Make it yours.</strong> Tap drum squares to add or remove hits. Each group of four is one beat.</li><li><strong>Add some notes.</strong> Pick a bass or melody note, then tap steps to place it. Tap the same note again to erase it. All notes follow your selected key and scale.</li><li><strong>Try something new.</strong> Change the tempo, move the volume sliders, or hit Surprise me for a new editable loop.</li><li><strong>Keep your idea.</strong> Give it a name and Save project. Load brings back your saved loops on this browser.</li></ol><p class="dialog-note">On iPhone, keep this page open while playing. Switching apps or taking a call pauses the beat; tap Play when you return. If you cannot hear it, check your device volume, silent mode, and audio output.</p><button class="primary close-guide">Let’s make a beat</button></dialog>
+  <dialog id="load-dialog"><div class="dialog-head"><h2>Your saved projects</h2><button class="close-dialog" aria-label="Close saved projects">×</button></div><p class="dialog-note">Saved in this browser on this device. Clearing browser data removes these projects. Download a backup to keep a copy.</p><div id="saved-projects"></div><div class="file-actions"><button id="export-button" class="subtle-button">↓ Download project</button><label class="subtle-button file-label">↑ Import project<input type="file" id="import-file" accept=".json,application/json"></label></div></dialog>
+  <dialog id="confirm-dialog"><div class="dialog-head"><h2 id="confirm-title">Start fresh?</h2><button class="close-dialog" aria-label="Cancel">×</button></div><p id="confirm-text" class="dialog-note"></p><div class="confirm-actions"><button id="confirm-cancel" class="subtle-button">Cancel</button><button id="confirm-yes" class="primary">Continue</button></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
