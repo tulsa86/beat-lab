@@ -18,8 +18,8 @@
 <h1>Pick a sound. <span>Make noise.</span></h1><p>Choose a sound, tap the colorful pads, and have fun. Got something good? Record it and add another sound.</p>
 <section class="panel"><h2>1. Pick a sound</h2>
 <div id="sound-choices" class="sound-choices" role="group" aria-label="Choose your sound"></div>
-<div hidden aria-hidden="true"><select id="instrument"><option value="808">808 Drum Kit</option><option value="acoustic">Acoustic Drums</option><option value="bass">Synth Bass</option><option value="sub">808 Sub Bass</option><option value="keys">Electric Keys</option><option value="piano">Soft Piano</option><option value="synth">Synth Lead</option><option value="bell">Bells</option><option value="guitar">Guitar-style Plucks</option><option value="organ">Organ</option></select><select id="key"></select><select id="scale"><option value="pent" selected>Pentatonic</option><option value="minor">Minor</option><option value="major">Major</option><option value="chromatic">All notes</option></select><input id="bpm" type="number" min="60" max="180" value="108"><button id="oct-down">−</button><span id="oct-label"></span><button id="oct-up">+</button></div>
-<h2 style="margin-top:23px">2. Tap the pads</h2><p class="hint">No wrong notes. Just tap and play.</p>
+<div hidden aria-hidden="true"><select id="instrument"><option value="808">808 Drums</option><option value="bounce">Pop Drums</option><option value="hats">Hi-Hats + Perc</option><option value="sub">808 Bass</option><option value="bass">Bouncy Bass</option><option value="hook">Pop Hooks</option><option value="chords">Chord Hits</option><option value="fx">Beat FX</option><option value="acoustic">Acoustic Drums</option><option value="keys">Electric Keys</option><option value="piano">Piano</option><option value="synth">Synth</option><option value="bell">Bells</option><option value="guitar">Guitar</option><option value="organ">Organ</option></select><select id="key"></select><select id="scale"><option value="pent" selected>Pentatonic</option><option value="minor">Minor</option><option value="major">Major</option><option value="chromatic">All notes</option></select><input id="bpm" type="number" min="60" max="180" value="108"><button id="oct-down">−</button><span id="oct-label"></span><button id="oct-up">+</button></div>
+<h2 style="margin-top:23px">2. Tap the pads</h2><p class="hint">808 drums, pop rhythms, bass, hooks and effects. No wrong buttons.</p>
 <div id="pads" class="padgrid" aria-label="Playable instrument pads"></div></section>
 <section class="panel"><h2>3. Keep a beat you like (optional)</h2><div class="actions">
 <button id="play" class="primary">▶ Play loop</button><button id="record" class="rec">● Record</button><button id="stop">■ Stop</button><button id="clear">New jam</button>
@@ -36,8 +36,9 @@ function bpm(){return Math.max(60,Math.min(180,Number($('bpm').value)||108))}
 function stepDur(){return 60/bpm()/4}
 function settings(){return {instrument:$('instrument').value,key:Number($('key').value),scale:$('scale').value,octave,bpm:bpm()}}
 function getMidi(s,p){const offsets=scales[s.scale],offset=offsets[p%offsets.length]+12*Math.floor(p/offsets.length);return 60+s.key+s.octave*12+offset}
-function padName(s,p){if(['808','acoustic'].includes(s.instrument))return drums[p];const midi=getMidi(s,p);return roots[((midi%12)+12)%12]+(Math.floor(midi/12)-1)}
-const soundOptions=[['808','🥁','808 Drums'],['acoustic','🪘','Drum Kit'],['bass','🎸','Synth Bass'],['sub','🔊','Deep Bass'],['keys','🎹','Electric Keys'],['piano','🎼','Piano'],['synth','🚀','Synth'],['bell','🔔','Bells'],['guitar','🎸','Guitar'],['organ','🎵','Organ']];
+const percussionNames={bounce:['Punch Kick','Pop Snare','Clap','Snap','Shaker','Big Kick','Rim','Dance Clap','Tight Hat','Open Hat','Tom','Tambourine','Double Clap','Cowbell','Crash','808 Drop'],hats:['Closed Hat','Open Hat','Hat Roll','Trap Tick','Shaker','Tambourine','Rim','Click','Cowbell','Clap','Snap','Claves','Crash','Reverse','Perc Pop','Fill'],fx:['Riser','Impact','Laser','Drop','Vinyl','Whistle','Zap','Sweep','Ping','Bubble','Scratch','Blip','Air','Boom','Spark','Roll']};
+function padName(s,p){if(percussionNames[s.instrument])return percussionNames[s.instrument][p];if(['808','acoustic'].includes(s.instrument))return drums[p];if(s.instrument==='chords')return ['Bright 1','Bright 2','Bright 3','Bright 4','Warm 1','Warm 2','Warm 3','Warm 4','Dream 1','Dream 2','Dream 3','Dream 4','Stab 1','Stab 2','Stab 3','Stab 4'][p];const midi=getMidi(s,p);return roots[((midi%12)+12)%12]+(Math.floor(midi/12)-1)}
+const soundOptions=[['808','🥁','808 Drums'],['bounce','💥','Pop Drums'],['hats','✨','Hi-Hats + Perc'],['sub','🔊','808 Bass'],['bass','🫧','Bouncy Bass'],['hook','🌈','Pop Hooks'],['chords','🎶','Chord Hits'],['fx','⚡','Beat FX']];
 function renderSounds(){const box=$('sound-choices');box.replaceChildren();for(const [id,emoji,name] of soundOptions){const b=document.createElement('button');b.type='button';b.className='sound-choice';b.setAttribute('aria-pressed',String($('instrument').value===id));const pic=document.createElement('span');pic.className='emoji';pic.textContent=emoji;const label=document.createElement('span');label.textContent=name;b.append(pic,label);b.onclick=()=>{if(rec||recordPending)finishRecord();$('instrument').value=id;renderSounds();renderPads();tell('Playing '+name+' · tap a pad')};box.append(b)}}
 function renderPads(){const s=settings();$('pads').replaceChildren();padButtons.length=0;for(let i=0;i<16;i++){const b=document.createElement('button');b.className='pad';b.style.setProperty('--hue',String((i*31+145)%360));b.type='button';b.innerHTML='<small>PAD '+String(i+1).padStart(2,'0')+'</small>';const strong=document.createElement('strong');strong.textContent=padName(s,i);b.append(strong);b.setAttribute('aria-label','Play '+padName(s,i));b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add('pressed');void press(i,s)});const release=()=>{b.classList.remove('pressed');lift(i)};b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);b.addEventListener('lostpointercapture',release);padButtons.push(b);$('pads').append(b)}}
 async function audio(){if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('This browser does not support audio');ctx=new AC();master=ctx.createGain();master.gain.value=.66;const limiter=ctx.createDynamicsCompressor();master.connect(limiter);limiter.connect(ctx.destination);noise=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const d=noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}await ctx.resume()}
@@ -93,8 +94,50 @@ function stringPluck(hz,t,v){
   feedback.gain.setValueAtTime(.975,t);feedback.gain.setTargetAtTime(.0001,t+.65,.12);
   excitation.onended=()=>{setTimeout(()=>{try{excitation.disconnect();delay.disconnect();damp.disconnect();feedback.disconnect();out.disconnect()}catch{}},1600)};
 }
+// Beat-oriented banks: recognizable drums, sub bass, chord stabs, hooks and effects.
+function beatPerc(kind,p,t,v){
+ const n=kind==='bounce'?p:kind==='hats'?([2,3,9,2,9,11,5,12,2,3,4,11,10,10,12,9][p]):p;
+ if(kind==='fx'){
+   if(p%4===0){osc(350,t,.55,'sawtooth',.16*v,1100);hiss(t,.27,'highpass',2200,.12*v)}
+   else if(p%4===1){osc(180,t,.5,'sine',.65*v,43);hiss(t,.12,'bandpass',900,.28*v)}
+   else if(p%4===2){osc(1000,t,.29,'square',.12*v,120);hiss(t,.12,'highpass',4000,.14*v)}
+   else {osc(570,t,.21,'triangle',.26*v,260);osc(760,t,.11,'sine',.1*v,450)}return;
+ }
+ if(kind==='hats' && (p===2||p===15)){for(let k=0;k<4;k++)hiss(t+k*.055,.035,'highpass',8400,.19*v);return}
+ if(n===0||n===5||n===15){osc(n===15?120:155,t,n===15?.65:.3,'sine',.8*v,n===15?37:48);return}
+ if(n===1||n===7){hiss(t,.13,'highpass',n===7?2400:1700,.48*v);osc(230,t,.08,'triangle',.13*v,120);return}
+ if(n===2||n===12){for(let k=0;k<3;k++)hiss(t+k*.013,.1,'bandpass',1750,.29*v);return}
+ if(n===3||n===10){hiss(t,.09,'bandpass',2900,.23*v);return}
+ if(n===4||n===11){hiss(t,.095,'highpass',5500,.2*v);return}
+ if(n===8){hiss(t,.045,'highpass',8500,.23*v);return}
+ if(n===9){hiss(t,.27,'highpass',7800,.22*v);return}
+ if(n===6){osc(720,t,.08,'triangle',.2*v,310);return}
+ if(n===13){osc(600,t,.17,'square',.13*v);osc(830,t,.13,'square',.09*v);return}
+ if(n===14){hiss(t,.65,'highpass',4000,.23*v);return}
+ osc(230,t,.22,'sine',.36*v,105);
+}
+function popChord(s,p,t,v){
+ // Four friendly pop progressions, each pad plays a pre-voiced harmonic hit.
+ const degrees=[0,5,3,4,0,3,5,4,0,4,5,3,0,5,4,3];
+ const root=48+s.key+degrees[p];const quality=[0,3,7,10];
+ const minor=(p%4===2),third=minor?3:4;
+ const intervals=[0,third,7,p<8?12:10];
+ const length=p<4?.48:p<8?.86:p<12?1.5:.22;
+ intervals.forEach((iv,i)=>shaped(440*2**((root+iv-69)/12),t,length,{wave:p>=12?'sawtooth':p>=8?'sine':'triangle',vol:(.13-i*.019)*v,cutoff:p>=12?1850:3400,attack:p>=8?.055:.008,sustain:p>=8?.3:undefined}));
+}
+function popHook(hz,p,t,v){
+ // Fast-decay dual oscillator with octave sparkle, halfway between a pluck and a dance lead.
+ const dur=.22+(p%4)*.09;
+ shaped(hz,t,dur,{wave:'square',vol:.15*v,cutoff:1300+sweepTone(p),sweep:450,decay:.1,q:1.4});
+ shaped(hz*2,t,.15,{wave:'sine',vol:.13*v});
+ if(p%4===3)shaped(hz*1.5,t,.13,{wave:'triangle',vol:.055*v});
+}
+function sweepTone(p){return p%2?2200:4000}
 function playVoice(s,p,t,d=.25,v=.8){
   const kind=s.instrument;
+  if(kind==='bounce'||kind==='hats'||kind==='fx'){beatPerc(kind,p,t,v);return}
+  if(kind==='chords'){popChord(s,p,t,v);return}
+  if(kind==='hook'){const hz=440*2**((getMidi(s,p)-69)/12);popHook(hz,p,t,v);return}
   if(kind==='808'||kind==='acoustic'){
     const low=kind==='808';
     if(!low){
@@ -161,7 +204,7 @@ function draw(){if(!playing)return;const current=(Math.floor(Math.max(0,ctx.curr
 function stopTransport(){playing=false;clearInterval(timer);cancelAnimationFrame(raf);$('play').textContent='▶ Play loop';$('play').classList.remove('active');[...$('steps').children].forEach(x=>x.classList.remove('on'))}
 function finishRecord(){if(recordPending){recordPending=false;rec=null;tell('Recording cancelled')}else if(rec){if(rec.events.length){tracks.push({settings:rec.settings,events:rec.events,muted:false,id:Date.now()+Math.random()});tell('Layer added. Switch instruments to record another.')}else tell('No notes recorded. Try tapping the pads.');rec=null;drawTracks()}$('record').textContent='● Record layer';$('record').classList.remove('active')}
 function drawTracks(){$('count').textContent='('+tracks.length+')';$('tracks').replaceChildren();if(!tracks.length){$('tracks').innerHTML='<p class="empty">No layers yet. Pick an instrument and record your first loop.</p>';return}tracks.forEach((tr,i)=>{const row=document.createElement('div');row.className='track';const name=document.createElement('strong');name.className='name';name.textContent=(i+1)+'. '+($('instrument').querySelector('[value="'+tr.settings.instrument+'"]')?.textContent||tr.settings.instrument);const sub=document.createElement('small');sub.textContent=tr.events.length+' hits/notes';name.append(sub);const mute=document.createElement('button');mute.textContent=tr.muted?'Unmute':'Mute';mute.classList.toggle('ison',tr.muted);mute.onclick=()=>{tr.muted=!tr.muted;drawTracks()};const del=document.createElement('button');del.textContent='Delete';del.onclick=()=>{tracks.splice(i,1);drawTracks()};row.append(name,mute,del);$('tracks').append(row)})}
-function valid(data){if(!data||data.version!==1||!Array.isArray(data.tracks)||data.tracks.length>48)throw Error('Invalid Quick Jam backup');return data.tracks.map(tr=>{if(!tr.settings||!['808','acoustic','bass','sub','keys','piano','synth','bell','guitar','organ'].includes(tr.settings.instrument)||!scales[tr.settings.scale]||!Number.isInteger(tr.settings.key)||tr.settings.key<0||tr.settings.key>11||!Number.isInteger(tr.settings.octave)||Math.abs(tr.settings.octave)>2||!Array.isArray(tr.events)||tr.events.length>1024)throw Error('Invalid track data');const events=tr.events.map(e=>{if(!Number.isInteger(e.pad)||e.pad<0||e.pad>15||!Number.isInteger(e.step)||e.step<0||e.step>15||!Number.isFinite(e.length)||e.length<1||e.length>16)throw Error('Invalid note');return {pad:e.pad,step:e.step,length:e.length,velocity:Math.max(.1,Math.min(1,Number(e.velocity)||1))}});return {settings:tr.settings,events,muted:!!tr.muted,id:Math.random()}})}
+function valid(data){if(!data||data.version!==1||!Array.isArray(data.tracks)||data.tracks.length>48)throw Error('Invalid Quick Jam backup');return data.tracks.map(tr=>{if(!tr.settings||!['808','bounce','hats','fx','hook','chords','acoustic','bass','sub','keys','piano','synth','bell','guitar','organ'].includes(tr.settings.instrument)||!scales[tr.settings.scale]||!Number.isInteger(tr.settings.key)||tr.settings.key<0||tr.settings.key>11||!Number.isInteger(tr.settings.octave)||Math.abs(tr.settings.octave)>2||!Array.isArray(tr.events)||tr.events.length>1024)throw Error('Invalid track data');const events=tr.events.map(e=>{if(!Number.isInteger(e.pad)||e.pad<0||e.pad>15||!Number.isInteger(e.step)||e.step<0||e.step>15||!Number.isFinite(e.length)||e.length<1||e.length>16)throw Error('Invalid note');return {pad:e.pad,step:e.step,length:e.length,velocity:Math.max(.1,Math.min(1,Number(e.velocity)||1))}});return {settings:tr.settings,events,muted:!!tr.muted,id:Math.random()}})}
 for(let i=0;i<12;i++){const o=document.createElement('option');o.value=i;o.textContent=roots[i];$('key').append(o)}for(let i=0;i<16;i++)$('steps').append(document.createElement('i'));
 ['instrument','key','scale'].forEach(id=>$(id).onchange=()=>{if(rec)finishRecord();renderPads()});
 $('bpm').onchange=()=>{if(rec)finishRecord();$('bpm').value=bpm();if(playing){stopTransport();startTransport();tell('Tempo changed · loop restarted')}};$('oct-down').onclick=()=>{octave=Math.max(-2,octave-1);$('oct-label').textContent='Octave '+octave;renderPads()};$('oct-up').onclick=()=>{octave=Math.min(2,octave+1);$('oct-label').textContent='Octave '+octave;renderPads()};
