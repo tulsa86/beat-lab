@@ -12,10 +12,51 @@
 .pad strong{font-size:clamp(.72rem,2.8vw,1.13rem)}
 .pad:active,.pad.pressed{background:#dbfa8d;color:#151b11;text-shadow:none;box-shadow:0 0 22px #cafa7560}
 @media(min-width:650px){.sound-choices{grid-template-columns:repeat(5,minmax(0,1fr))}}
+
+/* Quick Jam visual finish: lightweight rhythm-game skin; audio engine unchanged. */
+:root{color-scheme:dark;background:#090d20;color:#f7f8ff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;background:radial-gradient(ellipse at 12% 0%,#26316b 0%,transparent 42%),radial-gradient(ellipse at 95% 20%,#48255e 0%,transparent 35%),#090d20}
+.wrap{max-width:1040px}
+header{padding:12px 0 18px;border-bottom:1px solid #ffffff21}
+header a{color:#c7f86b}
+header .hint{letter-spacing:.14em;font-size:.7rem;font-weight:800;color:#a8b5e6}
+h1{font-weight:950;line-height:1.04;letter-spacing:-.065em;text-shadow:0 8px 40px #0005}
+h1 span{color:#b9ff62}
+h2{font-weight:850;letter-spacing:-.025em}
+p{color:#bdc5e6}
+.panel{position:relative;overflow:hidden;background:linear-gradient(155deg,#22294cf2,#171c38f5);border:1px solid #7884c444;border-radius:24px;padding:clamp(16px,3vw,27px);box-shadow:0 15px 36px #0005,inset 0 1px #ffffff14;margin:19px 0}
+.panel:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,#b9ff62,#5bdcff,#b77cff,#ff73b6);opacity:.85}
+.sound-choices{gap:11px}
+.sound-choice{border:1px solid #aab8ff35;background:linear-gradient(145deg,#353d6b,#262c50);border-radius:16px;min-height:74px;color:#f6f7ff;box-shadow:inset 0 1px #ffffff1a,0 4px 0 #0c1028;transition:transform .12s,border-color .12s,background .12s}
+.sound-choice .emoji{font-size:1.6rem}
+.sound-choice[aria-pressed="true"]{background:linear-gradient(145deg,#5b478c,#344f8b);border-color:#c6ff71;box-shadow:0 0 0 2px #c6ff7140,0 5px 18px #8b6fff30,inset 0 1px #ffffff35}
+.sound-choice:active{transform:translateY(3px);box-shadow:inset 0 2px 8px #0005}
+.padgrid{gap:clamp(8px,1.8vw,14px);margin:22px 0 10px}
+.pad{min-height:72px;aspect-ratio:1.14;border-radius:18px;border:1px solid hsl(var(--hue) 95% 75%);border-bottom:5px solid hsl(var(--hue) 70% 20%);background:linear-gradient(155deg,hsl(var(--hue) 89% 66%),hsl(var(--hue) 77% 39%));box-shadow:inset 0 3px 0 #ffffff48,inset 0 -6px 14px #0002,0 8px 18px #0005;transition:transform .09s,filter .09s,box-shadow .09s}
+.pad strong{font-weight:900;letter-spacing:-.025em;font-size:clamp(.76rem,2.5vw,1.1rem)}
+.pad small{font-weight:850;letter-spacing:.12em}
+.pad:active,.pad.pressed{transform:translateY(4px) scale(.975);filter:brightness(1.2);box-shadow:inset 0 3px 14px #ffffff55,0 0 25px hsl(var(--hue) 95% 65% / .65);background:linear-gradient(155deg,hsl(var(--hue) 95% 76%),hsl(var(--hue) 90% 52%));color:white}
+button:focus-visible,a:focus-visible{outline:3px solid #c6ff71;outline-offset:3px}
+.actions{gap:10px}
+.actions button{border-radius:13px;min-height:48px;padding:11px 16px}
+button.primary{background:linear-gradient(135deg,#caff69,#8af1a2);color:#111b26;border-color:#d8ff9e;box-shadow:0 5px 0 #49773e;font-weight:900}
+button.rec{background:#522a4a;color:#ffc7d8;border:1px solid #e677aa}
+button.rec.active{background:#bc285c;color:#fff;box-shadow:0 0 22px #ff397b66}
+.stepbar{gap:5px;margin:20px 0 13px}
+.stepbar i{height:12px;border-radius:4px;background:#465078;transition:background .08s,box-shadow .08s}
+.stepbar i.on{background:#c6ff71;box-shadow:0 0 13px #c6ff71}
+#status{color:#baff8e;font-weight:650}
+.track{border-color:#7d88b53b;padding:14px 0}
+.track .name{font-size:1rem}
+.track button.ison{background:#c6ff71;color:#131c25}
+.hint,.empty,.track small{color:#bac5e4}
+@media(max-width:480px){.wrap{padding:14px 12px 60px}.panel{border-radius:19px;padding:15px}.sound-choices{gap:8px}.sound-choice{min-height:68px;padding:10px 7px;font-size:.8rem}.padgrid{gap:8px}.pad{border-radius:13px;min-height:68px}.pad strong{font-size:.78rem}.actions button{flex:1 1 auto}}
+@media(hover:hover){.sound-choice:hover{border-color:#c6ff71aa}.pad:hover{filter:brightness(1.09)}}
+@media(prefers-reduced-motion:reduce){.pad,.sound-choice,.stepbar i{transition:none}}
 </style></head>
 <body><main class="wrap">
 <header><a href="./">← Beat Lab Studio</a><span class="hint">QUICK JAM STUDIO · BETA</span></header>
-<h1>Pick a sound. <span>Make noise.</span></h1><p>Choose a sound, tap the colorful pads, and have fun. Got something good? Record it and add another sound.</p>
+<h1>Make a beat. <span>Feel the game.</span></h1><p>Pick your sound, light up the pads, and build a beat layer by layer.</p>
 <section class="panel"><h2>1. Pick a sound</h2>
 <div id="sound-choices" class="sound-choices" role="group" aria-label="Choose your sound"></div>
 <div hidden aria-hidden="true"><select id="instrument"><option value="808">808 Drums</option><option value="bounce">Pop Drums</option><option value="hats">Hi-Hats + Perc</option><option value="sub">808 Bass</option><option value="bass">Bouncy Bass</option><option value="hook">Pop Hooks</option><option value="chords">Chord Hits</option><option value="fx">Beat FX</option><option value="acoustic">Acoustic Drums</option><option value="keys">Electric Keys</option><option value="piano">Piano</option><option value="synth">Synth</option><option value="bell">Bells</option><option value="guitar">Guitar</option><option value="organ">Organ</option></select><select id="key"></select><select id="scale"><option value="pent" selected>Pentatonic</option><option value="minor">Minor</option><option value="major">Major</option><option value="chromatic">All notes</option></select><input id="bpm" type="number" min="60" max="180" value="108"><button id="oct-down">−</button><span id="oct-label"></span><button id="oct-up">+</button></div>
