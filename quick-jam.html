@@ -95,15 +95,75 @@ h1+p{font-size:.88rem;margin:0 0 12px}
 .game-tracks .track button{font-size:.76rem}
 @media(min-width:820px){.game-shell{grid-template-columns:minmax(0,1fr) 270px;align-items:start}.game-main{grid-row:1 / span 2}.game-transport{grid-column:2}.game-tracks{grid-column:2}.game-transport .actions{grid-template-columns:repeat(2,1fr)}.sound-choice{flex-basis:115px}}
 @media(max-width:480px){.wrap{padding:9px 9px 50px}header{padding:3px 2px 8px}.game-main,.game-transport,.game-tracks{border-radius:16px;padding:11px}.game-shell{gap:9px}.sound-choice{flex-basis:96px;min-height:62px;font-size:.66rem}.sound-choice .emoji{font-size:1.25rem}.padgrid{gap:7px}.pad{min-height:59px;border-radius:11px}.pad strong{font-size:.73rem}.game-transport .actions button{font-size:.76rem;min-height:43px}.game-pad-heading .hint{font-size:.64rem}}
+
+/* Approved Quick Jam Studio neon arcade interface */
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#f7f8ff;background:#050a1c}
+*,*::before,*::after{box-sizing:border-box}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+body{background:radial-gradient(ellipse 80% 35% at 55% 0%,#182255 0%,transparent 90%),#050a1c}
+.wrap{width:100%;max-width:920px;padding:14px 12px 48px}
+header{border:0;padding:0 0 8px}
+header a{font-size:.78rem;color:#7fd7ff}
+header .hint{font-size:.63rem;letter-spacing:.08em}
+h1{font-size:clamp(1.8rem,7vw,3.6rem);font-weight:950;letter-spacing:-.045em;line-height:1.03;margin:10px 0 4px;text-transform:uppercase;color:#f6f9ff}
+h1 span{background:linear-gradient(100deg,#69bfff,#b35aff,#ff48d2);background-clip:text;-webkit-background-clip:text;color:transparent}
+h1+p{font-size:.77rem;color:#a7b8e6;margin:0 0 12px}
+.game-shell{display:flex;flex-direction:column;gap:12px;min-width:0}
+.game-main,.game-transport,.game-tracks{width:100%;min-width:0;max-width:100%;padding:10px;border-radius:16px;background:linear-gradient(160deg,#111c43,#080f2c);border:1px solid #235bbd7a;box-shadow:inset 0 1px #69bfff25,0 10px 35px #0005}
+.game-main{display:flex;flex-direction:column}
+.game-main>h2{display:none}
+.sound-choices{display:flex;flex-wrap:nowrap;overflow-x:auto;max-width:100%;min-width:0;gap:7px;padding:5px 2px 11px;scrollbar-width:thin}
+.sound-choice{flex:0 0 81px;min-width:0;min-height:74px;border-radius:13px;background:linear-gradient(165deg,#1c214d,#0a1230);border:1px solid #4b4f9e;box-shadow:inset 0 1px #ffffff16,0 3px 0 #060b21;color:#fff;padding:6px 3px;gap:3px;font-size:.69rem;font-weight:800;line-height:1.13}
+.sound-choice .emoji{font-size:1.38rem}
+.sound-choice[aria-pressed="true"]{background:linear-gradient(150deg,#4a185e,#181442);border:2px solid #ff5cf3;box-shadow:0 0 12px #f735e8a0,inset 0 0 10px #e736c840}
+.game-pad-heading{margin:3px 0 0}
+.game-pad-heading h2{display:none}
+.game-pad-heading .hint{display:none}
+.padgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(6px,1.6vw,11px);width:100%;min-width:0;margin:8px 0}
+.pad{width:100%;min-width:0;min-height:0;aspect-ratio:1 / 1.02;border-radius:12px;padding:12px 3px 5px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;box-shadow:inset 0 2px #ffffff6b,0 4px 0 hsl(var(--hue) 82% 21%),0 0 12px hsl(var(--hue) 100% 48% / .24);border:2px solid hsl(var(--hue) 100% 64%);border-bottom-width:3px;background:linear-gradient(150deg,hsl(var(--hue) 100% 54%),hsl(var(--hue) 95% 36%))}
+.pad small{position:absolute;top:5px;left:7px;font-size:.55rem;opacity:.9;letter-spacing:.02em}
+.pad strong{font-size:clamp(.57rem,2.3vw,.93rem);line-height:1.1;overflow-wrap:anywhere;text-shadow:0 1px 3px #0007}
+.pad .pad-symbol{font-size:clamp(1.1rem,4.5vw,2rem);line-height:1.1;font-weight:700;filter:drop-shadow(0 2px 3px #0004);pointer-events:none}
+.pad:active,.pad.pressed{transform:translateY(3px) scale(.97);filter:brightness(1.18)}
+.game-transport{display:flex;flex-direction:column}
+.game-transport>h2{display:none}
+.game-transport .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;order:2}
+.game-transport .actions button{min-width:0;min-height:56px;padding:7px 3px;border-radius:12px;font-size:.7rem;white-space:normal}
+.game-transport .actions #play{background:linear-gradient(150deg,#0b7e41,#053d34);color:#afffb7;border:2px solid #66ff96;box-shadow:0 0 12px #23ff7845}
+.game-transport .actions #record{background:linear-gradient(150deg,#7e1839,#3c112e);color:#ffadb9;border:2px solid #ff466f}
+.game-transport .actions #stop{background:#151e44;border:2px solid #7488d4;color:#f0f3ff}
+.game-transport .actions #clear{background:#181638;border:2px solid #604d9c;color:#c8bbff}
+.game-transport .stepbar{order:0;margin:2px 0 7px;gap:3px;min-width:0}
+.game-transport .stepbar i{min-width:0;height:17px;background:#4b205b;border-radius:3px}
+.game-transport .stepbar i.on{background:#ff4ee8;box-shadow:0 0 12px #ff4ee8}
+.game-transport .inline{order:1;margin-bottom:9px;justify-content:space-between}
+.game-transport #status{order:3;margin:10px 0 0;font-size:.73rem}
+.game-transport>p.hint{order:4;margin:4px 0 0;font-size:.7rem}
+.game-tracks>h2{font-size:.8rem;letter-spacing:.08em}
+.game-tracks .track{display:flex;flex-wrap:nowrap;gap:6px}
+.game-tracks .track .name{min-width:0;flex:1;overflow-wrap:anywhere}
+.game-tracks .track button{padding:6px;min-height:32px}
+.game-tracks .actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.game-tracks .actions button,.game-tracks .actions label{min-width:0;text-align:center;padding:9px 4px;font-size:.68rem}
+.game-tracks .actions label{grid-column:1/-1}
+.game-tracks .hint{font-size:.7rem}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 9px;padding:7px 9px;background:#071334;border:1px solid #23467c;border-radius:10px}
+.hud .hud-label{font-size:.64rem;font-weight:900;letter-spacing:.1em;color:#a7b6f1}
+.hud .hud-tempo{display:flex;align-items:center;gap:7px}
+.hud .hud-tempo button{min-height:30px;min-width:30px;padding:2px 7px;border:1px solid #258dd8;background:#0b3566;color:#7ee4ff;font-size:1.1rem}
+.hud #tempo-value{font-weight:900;font-size:1.1rem;font-variant-numeric:tabular-nums}
+@media(min-width:680px){.wrap{padding:20px}.sound-choice{flex-basis:106px}.pad{aspect-ratio:1.45}.pad strong{font-size:1rem}.pad .pad-symbol{font-size:2.2rem}.game-main,.game-transport,.game-tracks{padding:16px}.game-transport .actions button{font-size:.95rem}}
+@media(max-width:390px){.wrap{padding:9px 7px 35px}.game-main,.game-transport,.game-tracks{padding:7px}.sound-choice{flex-basis:73px;font-size:.62rem}.padgrid{gap:5px}.pad{border-radius:9px}.pad strong{font-size:.58rem}.pad small{font-size:.46rem;left:4px}.pad .pad-symbol{font-size:1.2rem}}
+@media(prefers-reduced-motion:reduce){.pad,.sound-choice,.stepbar i{transition:none}}
 </style></head>
 <body><main class="wrap">
-<header><a href="./">← Beat Lab Studio</a><span class="hint">QUICK JAM STUDIO · BETA</span></header>
-<h1>QUICK JAM <span>ARCADE</span></h1><p>Pick a sound. Hit the pads. Build your loop.</p>
+<header><a href="./">← Beat Lab Studio</a><span class="hint">QUICK JAM STUDIO · 1.0 PREVIEW</span></header>
+<h1>QUICK JAM <span>STUDIO</span></h1><p>Pick a sound. Hit the pads. Build your loop.</p>
 <div class="game-shell"><section class="game-main"><h2>CHOOSE YOUR SOUND</h2>
 <div id="sound-choices" class="sound-choices" role="group" aria-label="Choose your sound"></div>
 <div hidden aria-hidden="true"><select id="instrument"><option value="808">808 Drums</option><option value="bounce">Pop Drums</option><option value="hats">Hi-Hats + Perc</option><option value="sub">808 Bass</option><option value="bass">Bouncy Bass</option><option value="hook">Pop Hooks</option><option value="chords">Chord Hits</option><option value="fx">Beat FX</option><option value="acoustic">Acoustic Drums</option><option value="keys">Electric Keys</option><option value="piano">Piano</option><option value="synth">Synth</option><option value="bell">Bells</option><option value="guitar">Guitar</option><option value="organ">Organ</option></select><select id="key"></select><select id="scale"><option value="pent" selected>Pentatonic</option><option value="minor">Minor</option><option value="major">Major</option><option value="chromatic">All notes</option></select><input id="bpm" type="number" min="60" max="180" value="108"><button id="oct-down">−</button><span id="oct-label"></span><button id="oct-up">+</button></div>
 <div class="game-pad-heading"><h2>PLAY THE PADS</h2><p class="hint">Tap to make noise</p></div>
-<div id="pads" class="padgrid" aria-label="Playable instrument pads"></div></section>
+<div class="hud"><span class="hud-label">BPM</span><div class="hud-tempo"><button type="button" id="tempo-minus" aria-label="Decrease tempo">−</button><span id="tempo-value">108</span><button type="button" id="tempo-plus" aria-label="Increase tempo">+</button></div><span class="hud-label">16 STEP LOOP</span></div><div id="pads" class="padgrid" aria-label="Playable instrument pads"></div></section>
 <section class="game-transport"><h2>LOOP CONTROL</h2><div class="actions">
 <button id="play" class="primary">▶ Play loop</button><button id="record" class="rec">● Record</button><button id="stop">■ Stop</button><button id="clear">New jam</button>
 </div><div id="steps" class="stepbar" aria-hidden="true"></div><div class="inline"><span class="hint">1 bar · 16 steps · </span><span id="counter">01 / 16</span></div><p id="status" role="status" aria-live="polite">Tap a pad to enable sound. Record to capture your first layer.</p><p class="hint">Record a layer, switch sounds, then record another.</p></section>
@@ -123,7 +183,7 @@ const percussionNames={bounce:['Punch Kick','Pop Snare','Clap','Snap','Shaker','
 function padName(s,p){if(percussionNames[s.instrument])return percussionNames[s.instrument][p];if(['808','acoustic'].includes(s.instrument))return drums[p];if(s.instrument==='chords')return ['Bright 1','Bright 2','Bright 3','Bright 4','Warm 1','Warm 2','Warm 3','Warm 4','Dream 1','Dream 2','Dream 3','Dream 4','Stab 1','Stab 2','Stab 3','Stab 4'][p];const midi=getMidi(s,p);return roots[((midi%12)+12)%12]+(Math.floor(midi/12)-1)}
 const soundOptions=[['808','🥁','808 Drums'],['bounce','💥','Pop Drums'],['hats','✨','Hi-Hats + Perc'],['sub','🔊','808 Bass'],['bass','🫧','Bouncy Bass'],['hook','🌈','Pop Hooks'],['chords','🎶','Chord Hits'],['fx','⚡','Beat FX']];
 function renderSounds(){const box=$('sound-choices');box.replaceChildren();for(const [id,emoji,name] of soundOptions){const b=document.createElement('button');b.type='button';b.className='sound-choice';b.setAttribute('aria-pressed',String($('instrument').value===id));const pic=document.createElement('span');pic.className='emoji';pic.textContent=emoji;const label=document.createElement('span');label.textContent=name;b.append(pic,label);b.onclick=()=>{if(rec||recordPending)finishRecord();$('instrument').value=id;renderSounds();renderPads();tell('Playing '+name+' · tap a pad')};box.append(b)}}
-function renderPads(){const s=settings();$('pads').replaceChildren();padButtons.length=0;for(let i=0;i<16;i++){const b=document.createElement('button');b.className='pad';b.style.setProperty('--hue',String((i*31+145)%360));b.type='button';b.innerHTML='<small>PAD '+String(i+1).padStart(2,'0')+'</small>';const strong=document.createElement('strong');strong.textContent=padName(s,i);b.append(strong);b.setAttribute('aria-label','Play '+padName(s,i));b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add('pressed');void press(i,s)});const release=()=>{b.classList.remove('pressed');lift(i)};b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);b.addEventListener('lostpointercapture',release);padButtons.push(b);$('pads').append(b)}}
+function renderPads(){const s=settings();$('pads').replaceChildren();padButtons.length=0;for(let i=0;i<16;i++){const b=document.createElement('button');b.className='pad';b.style.setProperty('--hue',String((i*31+145)%360));b.type='button';b.innerHTML='<small>PAD '+String(i+1).padStart(2,'0')+'</small>';const symbols=['◉','▤','✧','◌','✦','▥','◇','◍','◎','✳','✺','⌁','◈','▦','ϟ','≋'];const symbol=document.createElement('span');symbol.className='pad-symbol';symbol.setAttribute('aria-hidden','true');symbol.textContent=symbols[i];const strong=document.createElement('strong');strong.textContent=padName(s,i);b.append(symbol,strong);b.setAttribute('aria-label','Play '+padName(s,i));b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add('pressed');void press(i,s)});const release=()=>{b.classList.remove('pressed');lift(i)};b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);b.addEventListener('lostpointercapture',release);padButtons.push(b);$('pads').append(b)}}
 async function audio(){if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('This browser does not support audio');ctx=new AC();master=ctx.createGain();master.gain.value=.66;const limiter=ctx.createDynamicsCompressor();master.connect(limiter);limiter.connect(ctx.destination);noise=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const d=noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}await ctx.resume()}
 function osc(freq,t,d,type='sine',vol=.25,slide=null,dest=master){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(Math.max(1,freq),t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(1,slide),t+Math.min(d*.7,.3));g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.001,vol),t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(dest);o.start(t);o.stop(t+d+.02)}
 function hiss(t,d,filter,cut,vol){const o=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.buffer=noise;f.type=filter;f.frequency.value=cut;g.gain.setValueAtTime(Math.max(.001,vol),t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(f);f.connect(g);g.connect(master);o.start(t);o.stop(t+d+.02)}
@@ -300,5 +360,5 @@ $('load').onclick=()=>{try{const raw=localStorage.getItem(store);if(!raw){tell('
 $('export').onclick=()=>{const blob=new Blob([JSON.stringify({version:1,bpm:bpm(),tracks},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='quick-jam-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);tell('Backup downloaded')};
 $('import').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>200000)throw Error('File too large');const data=JSON.parse(await f.text()),loaded=valid(data);if(tracks.length&&!confirm('Replace current layers with imported jam?'))return;stopTransport();tracks=loaded;if(Number.isFinite(data.bpm))$('bpm').value=Math.max(60,Math.min(180,data.bpm));drawTracks();tell('Jam imported')}catch(err){tell('Import failed: '+err.message)}finally{e.target.value=''}};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing){stopTransport();if(rec||recordPending)finishRecord();tell('Paused while away · tap Play to continue')}});
-renderSounds();renderPads();drawTracks();
+$('tempo-minus').onclick=()=>{$('bpm').value=Math.max(60,bpm()-5);$('bpm').onchange()};$('tempo-plus').onclick=()=>{$('bpm').value=Math.min(180,bpm()+5);$('bpm').onchange()};const oldTempoChange=$('bpm').onchange;$('bpm').onchange=()=>{oldTempoChange();$('tempo-value').textContent=bpm()};renderSounds();renderPads();drawTracks();
 </script></body></html>
