@@ -53,20 +53,62 @@ button.rec.active{background:#bc285c;color:#fff;box-shadow:0 0 22px #ff397b66}
 @media(max-width:480px){.wrap{padding:14px 12px 60px}.panel{border-radius:19px;padding:15px}.sound-choices{gap:8px}.sound-choice{min-height:68px;padding:10px 7px;font-size:.8rem}.padgrid{gap:8px}.pad{border-radius:13px;min-height:68px}.pad strong{font-size:.78rem}.actions button{flex:1 1 auto}}
 @media(hover:hover){.sound-choice:hover{border-color:#c6ff71aa}.pad:hover{filter:brightness(1.09)}}
 @media(prefers-reduced-motion:reduce){.pad,.sound-choice,.stepbar i{transition:none}}
+
+/* v1.0 game-layout overhaul: compact instrument dock, playfield and transport HUD */
+body{background:radial-gradient(circle at 50% -15%,#3b397e,#10132c 55%,#080b1b);overflow-x:hidden}
+.wrap{max-width:980px;padding:12px 14px 60px}
+header{padding:7px 0 10px}
+header a{font-size:.9rem}
+header .hint{font-size:.62rem}
+h1{font-size:clamp(1.55rem,5vw,2.7rem);margin:12px 0 3px}
+h1+p{font-size:.88rem;margin:0 0 12px}
+.game-shell{display:grid;gap:13px}
+.game-main{background:linear-gradient(160deg,#1b2144,#101731);border:1px solid #798dff4b;border-radius:23px;padding:13px;box-shadow:0 16px 50px #0007}
+.game-main:before{content:none}
+.game-main h2{font-size:.95rem;margin:0 0 8px}
+.game-main .hint{font-size:.73rem;margin:0 0 10px}
+.sound-choices{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 3px 10px;scrollbar-width:thin;scrollbar-color:#8190ca transparent}
+.sound-choice{flex:0 0 112px;min-height:70px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;padding:8px 5px;font-size:.72rem;border-radius:13px;box-shadow:inset 0 1px #ffffff20,0 3px 0 #080b20}
+.sound-choice .emoji{font-size:1.45rem}
+.sound-choice[aria-pressed="true"]{background:linear-gradient(145deg,#5954a0,#364c86)}
+.game-pad-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0}
+.game-pad-heading h2{margin:0}
+.game-pad-heading .hint{margin:0;text-align:right}
+.padgrid{gap:clamp(7px,1.4vw,12px);margin:10px 0 3px}
+.pad{min-height:68px;aspect-ratio:1.2;border-radius:13px;padding:18px 3px 5px}
+.pad small{top:6px;left:7px;font-size:.54rem}
+.pad strong{font-size:clamp(.7rem,2.6vw,1rem)}
+.game-transport{background:#111936;border:1px solid #6773b65a;border-radius:20px;padding:13px;box-shadow:0 10px 30px #0004}
+.game-transport h2{margin:0 0 9px;font-size:.9rem}
+.game-transport .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.game-transport .actions button{padding:8px 3px;min-width:0;min-height:49px;font-size:.8rem}
+.game-transport .stepbar{margin:14px 0 7px}
+.game-transport .hint{font-size:.74rem}
+.game-transport #status{font-size:.78rem;min-height:19px}
+.game-tracks{background:#151b36;border:1px solid #6474a44a;border-radius:20px;padding:13px}
+.game-tracks h2{margin:0 0 10px}
+.game-tracks .actions{display:flex;flex-wrap:wrap}
+.game-tracks .actions button{min-height:40px;padding:8px 11px;font-size:.78rem}
+.game-tracks .hint{font-size:.72rem}
+.game-tracks .track{padding:8px 0}
+.game-tracks .track .name{font-size:.86rem}
+.game-tracks .track button{font-size:.76rem}
+@media(min-width:820px){.game-shell{grid-template-columns:minmax(0,1fr) 270px;align-items:start}.game-main{grid-row:1 / span 2}.game-transport{grid-column:2}.game-tracks{grid-column:2}.game-transport .actions{grid-template-columns:repeat(2,1fr)}.sound-choice{flex-basis:115px}}
+@media(max-width:480px){.wrap{padding:9px 9px 50px}header{padding:3px 2px 8px}.game-main,.game-transport,.game-tracks{border-radius:16px;padding:11px}.game-shell{gap:9px}.sound-choice{flex-basis:96px;min-height:62px;font-size:.66rem}.sound-choice .emoji{font-size:1.25rem}.padgrid{gap:7px}.pad{min-height:59px;border-radius:11px}.pad strong{font-size:.73rem}.game-transport .actions button{font-size:.76rem;min-height:43px}.game-pad-heading .hint{font-size:.64rem}}
 </style></head>
 <body><main class="wrap">
 <header><a href="./">← Beat Lab Studio</a><span class="hint">QUICK JAM STUDIO · BETA</span></header>
-<h1>Make a beat. <span>Feel the game.</span></h1><p>Pick your sound, light up the pads, and build a beat layer by layer.</p>
-<section class="panel"><h2>1. Pick a sound</h2>
+<h1>QUICK JAM <span>ARCADE</span></h1><p>Pick a sound. Hit the pads. Build your loop.</p>
+<div class="game-shell"><section class="game-main"><h2>CHOOSE YOUR SOUND</h2>
 <div id="sound-choices" class="sound-choices" role="group" aria-label="Choose your sound"></div>
 <div hidden aria-hidden="true"><select id="instrument"><option value="808">808 Drums</option><option value="bounce">Pop Drums</option><option value="hats">Hi-Hats + Perc</option><option value="sub">808 Bass</option><option value="bass">Bouncy Bass</option><option value="hook">Pop Hooks</option><option value="chords">Chord Hits</option><option value="fx">Beat FX</option><option value="acoustic">Acoustic Drums</option><option value="keys">Electric Keys</option><option value="piano">Piano</option><option value="synth">Synth</option><option value="bell">Bells</option><option value="guitar">Guitar</option><option value="organ">Organ</option></select><select id="key"></select><select id="scale"><option value="pent" selected>Pentatonic</option><option value="minor">Minor</option><option value="major">Major</option><option value="chromatic">All notes</option></select><input id="bpm" type="number" min="60" max="180" value="108"><button id="oct-down">−</button><span id="oct-label"></span><button id="oct-up">+</button></div>
-<h2 style="margin-top:23px">2. Tap the pads</h2><p class="hint">808 drums, pop rhythms, bass, hooks and effects. No wrong buttons.</p>
+<div class="game-pad-heading"><h2>PLAY THE PADS</h2><p class="hint">Tap to make noise</p></div>
 <div id="pads" class="padgrid" aria-label="Playable instrument pads"></div></section>
-<section class="panel"><h2>3. Keep a beat you like (optional)</h2><div class="actions">
+<section class="game-transport"><h2>LOOP CONTROL</h2><div class="actions">
 <button id="play" class="primary">▶ Play loop</button><button id="record" class="rec">● Record</button><button id="stop">■ Stop</button><button id="clear">New jam</button>
-</div><div id="steps" class="stepbar" aria-hidden="true"></div><div class="inline"><span class="hint">1 bar · 16 steps · </span><span id="counter">01 / 16</span></div><p id="status" role="status" aria-live="polite">Tap a pad to enable sound. Record to capture your first layer.</p><p class="hint">Tap Record, play whatever you want, and tap Finish. Choose another sound and record again to layer it on top.</p></section>
-<section class="panel"><h2>Your sounds <span id="count" class="hint">(0)</span></h2><div id="tracks"><p class="empty">No layers yet. Pick an instrument and record your first loop.</p></div><div class="actions" style="margin-top:14px"><button id="save" class="primary">Save jam</button><button id="load">Load saved jam</button><button id="export">Export backup</button><label class="hint" style="cursor:pointer">Import backup <input class="sr" type="file" id="import" accept=".json,application/json"></label></div><p class="hint">Save stores this jam on this browser. Export a backup to keep it if browser data is cleared. Audio export and transfer to Beat Lab Studio are not included yet.</p></section>
-</main>
+</div><div id="steps" class="stepbar" aria-hidden="true"></div><div class="inline"><span class="hint">1 bar · 16 steps · </span><span id="counter">01 / 16</span></div><p id="status" role="status" aria-live="polite">Tap a pad to enable sound. Record to capture your first layer.</p><p class="hint">Record a layer, switch sounds, then record another.</p></section>
+<section class="game-tracks"><h2>YOUR LAYERS <span id="count" class="hint">(0)</span></h2><div id="tracks"><p class="empty">No layers yet. Pick an instrument and record your first loop.</p></div><div class="actions" style="margin-top:14px"><button id="save" class="primary">Save jam</button><button id="load">Load saved jam</button><button id="export">Export backup</button><label class="hint" style="cursor:pointer">Import backup <input class="sr" type="file" id="import" accept=".json,application/json"></label></div><p class="hint">Save stores this jam on this browser. Export a backup to keep it if browser data is cleared. Audio export and transfer to Beat Lab Studio are not included yet.</p></section>
+</div></main>
 <script type="module">
 const $=id=>document.getElementById(id), roots=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'],scales={minor:[0,2,3,5,7,8,10],major:[0,2,4,5,7,9,11],pent:[0,3,5,7,10],chromatic:[0,1,2,3,4,5,6,7,8,9,10,11]};
 const drums=['Kick','Snare','Closed Hat','Open Hat','Clap','Rim','Cowbell','Tom Low','Tom High','Shaker','Crash','Claves','Perc 1','Perc 2','808 Zap','808 Boom'];
