@@ -1,161 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#141617"><title>Quick Jam Studio | Beat Lab</title>
-<style>
-:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#141617;color:#f2f3ee}*{box-sizing:border-box}body{margin:0}button,select,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:default}a{color:#cafa75;text-decoration:none}.wrap{max-width:900px;padding:20px 16px 70px;margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:12px}header a{font-weight:800}h1{font-size:clamp(2.1rem,7vw,3.6rem);margin:26px 0 6px;letter-spacing:-.05em}h1 span{color:#cafa75}p{color:#b6bcb5;line-height:1.5}h2{font-size:1.12rem;margin:0 0 14px}.panel{background:#202423;border:1px solid #373d38;border-radius:17px;padding:16px;margin:15px 0}.controls,.actions,.inline{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.controls label{font-size:.8rem;color:#b4beb2;display:grid;gap:5px;flex:1;min-width:130px}.controls select,.controls input{width:100%;background:#131615;border:1px solid #4a5049;border-radius:8px;color:white;padding:10px;min-height:42px}button{border:1px solid #596157;color:white;background:#313831;padding:10px 14px;border-radius:10px;min-height:42px;font-weight:700}button.primary{background:#cafa75;color:#151913;border-color:#cafa75}button.rec{border-color:#fb806c;color:#ffaf9f}button.active{background:#923a34;border-color:#ff806c;color:white}.padgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:15px 0}.pad{touch-action:none;user-select:none;-webkit-user-select:none;aspect-ratio:1.13;min-height:64px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:10px;background:linear-gradient(145deg,#394740,#27322d);border:1px solid #607266;border-bottom:4px solid #18211b;transition:transform .05s,background .05s;font-size:clamp(.75rem,2.8vw,1.05rem)}.pad:active,.pad.pressed{background:#8bbd51;color:#111;transform:scale(.97)}.pad small{font-size:.68rem;opacity:.7}.stepbar{display:grid;grid-template-columns:repeat(16,1fr);gap:3px;margin:14px 0}.stepbar i{height:7px;background:#485149;border-radius:2px}.stepbar i.on{background:#cafa75}.hint{font-size:.83rem;color:#b9c1b7}.track{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:11px 0;border-bottom:1px solid #3b423c}.track:last-child{border:0}.track .name{flex:1;min-width:120px}.track small{display:block;color:#aebbb0;font-weight:400}.track button{min-height:36px;padding:7px 10px}.track button.ison{background:#cafa75;color:#111}.empty{font-size:.9rem;color:#aebbb0}#status{min-height:24px;color:#cafa75;font-size:.85rem}#counter{font-variant-numeric:tabular-nums;font-weight:700}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}@media(min-width:650px){.pad{min-height:94px}.wrap{padding-top:26px}} 
-
-.sound-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.sound-choice{display:flex;align-items:center;gap:9px;text-align:left;padding:13px 10px;min-height:60px;border-radius:14px;background:#303833;border:2px solid transparent;font-weight:750;font-size:clamp(.79rem,2.6vw,1rem)}
-.sound-choice .emoji{font-size:1.42rem}
-.sound-choice[aria-pressed="true"]{border-color:#dbfa8d;background:#435838;box-shadow:0 0 0 1px #cafa7550}
-.pad{background:linear-gradient(155deg,hsl(var(--hue) 70% 49%),hsl(var(--hue) 65% 27%));border-color:hsl(var(--hue) 68% 65%);border-bottom-color:hsl(var(--hue) 60% 20%);color:#fff;align-items:center;justify-content:center;text-align:center;box-shadow:inset 0 2px 12px #ffffff18;text-shadow:0 1px 3px #0009}
-.pad small{position:absolute;top:7px;left:8px;font-size:.62rem}.pad{position:relative;padding:19px 5px 6px}
-.pad strong{font-size:clamp(.72rem,2.8vw,1.13rem)}
-.pad:active,.pad.pressed{background:#dbfa8d;color:#151b11;text-shadow:none;box-shadow:0 0 22px #cafa7560}
-@media(min-width:650px){.sound-choices{grid-template-columns:repeat(5,minmax(0,1fr))}}
-
-/* Quick Jam visual finish: lightweight rhythm-game skin; audio engine unchanged. */
-:root{color-scheme:dark;background:#090d20;color:#f7f8ff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-body{min-height:100vh;background:radial-gradient(ellipse at 12% 0%,#26316b 0%,transparent 42%),radial-gradient(ellipse at 95% 20%,#48255e 0%,transparent 35%),#090d20}
-.wrap{max-width:1040px}
-header{padding:12px 0 18px;border-bottom:1px solid #ffffff21}
-header a{color:#c7f86b}
-header .hint{letter-spacing:.14em;font-size:.7rem;font-weight:800;color:#a8b5e6}
-h1{font-weight:950;line-height:1.04;letter-spacing:-.065em;text-shadow:0 8px 40px #0005}
-h1 span{color:#b9ff62}
-h2{font-weight:850;letter-spacing:-.025em}
-p{color:#bdc5e6}
-.panel{position:relative;overflow:hidden;background:linear-gradient(155deg,#22294cf2,#171c38f5);border:1px solid #7884c444;border-radius:24px;padding:clamp(16px,3vw,27px);box-shadow:0 15px 36px #0005,inset 0 1px #ffffff14;margin:19px 0}
-.panel:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,#b9ff62,#5bdcff,#b77cff,#ff73b6);opacity:.85}
-.sound-choices{gap:11px}
-.sound-choice{border:1px solid #aab8ff35;background:linear-gradient(145deg,#353d6b,#262c50);border-radius:16px;min-height:74px;color:#f6f7ff;box-shadow:inset 0 1px #ffffff1a,0 4px 0 #0c1028;transition:transform .12s,border-color .12s,background .12s}
-.sound-choice .emoji{font-size:1.6rem}
-.sound-choice[aria-pressed="true"]{background:linear-gradient(145deg,#5b478c,#344f8b);border-color:#c6ff71;box-shadow:0 0 0 2px #c6ff7140,0 5px 18px #8b6fff30,inset 0 1px #ffffff35}
-.sound-choice:active{transform:translateY(3px);box-shadow:inset 0 2px 8px #0005}
-.padgrid{gap:clamp(8px,1.8vw,14px);margin:22px 0 10px}
-.pad{min-height:72px;aspect-ratio:1.14;border-radius:18px;border:1px solid hsl(var(--hue) 95% 75%);border-bottom:5px solid hsl(var(--hue) 70% 20%);background:linear-gradient(155deg,hsl(var(--hue) 89% 66%),hsl(var(--hue) 77% 39%));box-shadow:inset 0 3px 0 #ffffff48,inset 0 -6px 14px #0002,0 8px 18px #0005;transition:transform .09s,filter .09s,box-shadow .09s}
-.pad strong{font-weight:900;letter-spacing:-.025em;font-size:clamp(.76rem,2.5vw,1.1rem)}
-.pad small{font-weight:850;letter-spacing:.12em}
-.pad:active,.pad.pressed{transform:translateY(4px) scale(.975);filter:brightness(1.2);box-shadow:inset 0 3px 14px #ffffff55,0 0 25px hsl(var(--hue) 95% 65% / .65);background:linear-gradient(155deg,hsl(var(--hue) 95% 76%),hsl(var(--hue) 90% 52%));color:white}
-button:focus-visible,a:focus-visible{outline:3px solid #c6ff71;outline-offset:3px}
-.actions{gap:10px}
-.actions button{border-radius:13px;min-height:48px;padding:11px 16px}
-button.primary{background:linear-gradient(135deg,#caff69,#8af1a2);color:#111b26;border-color:#d8ff9e;box-shadow:0 5px 0 #49773e;font-weight:900}
-button.rec{background:#522a4a;color:#ffc7d8;border:1px solid #e677aa}
-button.rec.active{background:#bc285c;color:#fff;box-shadow:0 0 22px #ff397b66}
-.stepbar{gap:5px;margin:20px 0 13px}
-.stepbar i{height:12px;border-radius:4px;background:#465078;transition:background .08s,box-shadow .08s}
-.stepbar i.on{background:#c6ff71;box-shadow:0 0 13px #c6ff71}
-#status{color:#baff8e;font-weight:650}
-.track{border-color:#7d88b53b;padding:14px 0}
-.track .name{font-size:1rem}
-.track button.ison{background:#c6ff71;color:#131c25}
-.hint,.empty,.track small{color:#bac5e4}
-@media(max-width:480px){.wrap{padding:14px 12px 60px}.panel{border-radius:19px;padding:15px}.sound-choices{gap:8px}.sound-choice{min-height:68px;padding:10px 7px;font-size:.8rem}.padgrid{gap:8px}.pad{border-radius:13px;min-height:68px}.pad strong{font-size:.78rem}.actions button{flex:1 1 auto}}
-@media(hover:hover){.sound-choice:hover{border-color:#c6ff71aa}.pad:hover{filter:brightness(1.09)}}
-@media(prefers-reduced-motion:reduce){.pad,.sound-choice,.stepbar i{transition:none}}
-
-/* v1.0 game-layout overhaul: compact instrument dock, playfield and transport HUD */
-body{background:radial-gradient(circle at 50% -15%,#3b397e,#10132c 55%,#080b1b);overflow-x:hidden}
-.wrap{max-width:980px;padding:12px 14px 60px}
-header{padding:7px 0 10px}
-header a{font-size:.9rem}
-header .hint{font-size:.62rem}
-h1{font-size:clamp(1.55rem,5vw,2.7rem);margin:12px 0 3px}
-h1+p{font-size:.88rem;margin:0 0 12px}
-.game-shell{display:grid;gap:13px}
-.game-main{background:linear-gradient(160deg,#1b2144,#101731);border:1px solid #798dff4b;border-radius:23px;padding:13px;box-shadow:0 16px 50px #0007}
-.game-main:before{content:none}
-.game-main h2{font-size:.95rem;margin:0 0 8px}
-.game-main .hint{font-size:.73rem;margin:0 0 10px}
-.sound-choices{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 3px 10px;scrollbar-width:thin;scrollbar-color:#8190ca transparent}
-.sound-choice{flex:0 0 112px;min-height:70px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;padding:8px 5px;font-size:.72rem;border-radius:13px;box-shadow:inset 0 1px #ffffff20,0 3px 0 #080b20}
-.sound-choice .emoji{font-size:1.45rem}
-.sound-choice[aria-pressed="true"]{background:linear-gradient(145deg,#5954a0,#364c86)}
-.game-pad-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0}
-.game-pad-heading h2{margin:0}
-.game-pad-heading .hint{margin:0;text-align:right}
-.padgrid{gap:clamp(7px,1.4vw,12px);margin:10px 0 3px}
-.pad{min-height:68px;aspect-ratio:1.2;border-radius:13px;padding:18px 3px 5px}
-.pad small{top:6px;left:7px;font-size:.54rem}
-.pad strong{font-size:clamp(.7rem,2.6vw,1rem)}
-.game-transport{background:#111936;border:1px solid #6773b65a;border-radius:20px;padding:13px;box-shadow:0 10px 30px #0004}
-.game-transport h2{margin:0 0 9px;font-size:.9rem}
-.game-transport .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
-.game-transport .actions button{padding:8px 3px;min-width:0;min-height:49px;font-size:.8rem}
-.game-transport .stepbar{margin:14px 0 7px}
-.game-transport .hint{font-size:.74rem}
-.game-transport #status{font-size:.78rem;min-height:19px}
-.game-tracks{background:#151b36;border:1px solid #6474a44a;border-radius:20px;padding:13px}
-.game-tracks h2{margin:0 0 10px}
-.game-tracks .actions{display:flex;flex-wrap:wrap}
-.game-tracks .actions button{min-height:40px;padding:8px 11px;font-size:.78rem}
-.game-tracks .hint{font-size:.72rem}
-.game-tracks .track{padding:8px 0}
-.game-tracks .track .name{font-size:.86rem}
-.game-tracks .track button{font-size:.76rem}
-@media(min-width:820px){.game-shell{grid-template-columns:minmax(0,1fr) 270px;align-items:start}.game-main{grid-row:1 / span 2}.game-transport{grid-column:2}.game-tracks{grid-column:2}.game-transport .actions{grid-template-columns:repeat(2,1fr)}.sound-choice{flex-basis:115px}}
-@media(max-width:480px){.wrap{padding:9px 9px 50px}header{padding:3px 2px 8px}.game-main,.game-transport,.game-tracks{border-radius:16px;padding:11px}.game-shell{gap:9px}.sound-choice{flex-basis:96px;min-height:62px;font-size:.66rem}.sound-choice .emoji{font-size:1.25rem}.padgrid{gap:7px}.pad{min-height:59px;border-radius:11px}.pad strong{font-size:.73rem}.game-transport .actions button{font-size:.76rem;min-height:43px}.game-pad-heading .hint{font-size:.64rem}}
-
-/* Approved Quick Jam Studio neon arcade interface */
-:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#f7f8ff;background:#050a1c}
-*,*::before,*::after{box-sizing:border-box}
-html,body{width:100%;max-width:100%;overflow-x:hidden}
-body{background:radial-gradient(ellipse 80% 35% at 55% 0%,#182255 0%,transparent 90%),#050a1c}
-.wrap{width:100%;max-width:920px;padding:14px 12px 48px}
-header{border:0;padding:0 0 8px}
-header a{font-size:.78rem;color:#7fd7ff}
-header .hint{font-size:.63rem;letter-spacing:.08em}
-h1{font-size:clamp(1.8rem,7vw,3.6rem);font-weight:950;letter-spacing:-.045em;line-height:1.03;margin:10px 0 4px;text-transform:uppercase;color:#f6f9ff}
-h1 span{background:linear-gradient(100deg,#69bfff,#b35aff,#ff48d2);background-clip:text;-webkit-background-clip:text;color:transparent}
-h1+p{font-size:.77rem;color:#a7b8e6;margin:0 0 12px}
-.game-shell{display:flex;flex-direction:column;gap:12px;min-width:0}
-.game-main,.game-transport,.game-tracks{width:100%;min-width:0;max-width:100%;padding:10px;border-radius:16px;background:linear-gradient(160deg,#111c43,#080f2c);border:1px solid #235bbd7a;box-shadow:inset 0 1px #69bfff25,0 10px 35px #0005}
-.game-main{display:flex;flex-direction:column}
-.game-main>h2{display:none}
-.sound-choices{display:flex;flex-wrap:nowrap;overflow-x:auto;max-width:100%;min-width:0;gap:7px;padding:5px 2px 11px;scrollbar-width:thin}
-.sound-choice{flex:0 0 81px;min-width:0;min-height:74px;border-radius:13px;background:linear-gradient(165deg,#1c214d,#0a1230);border:1px solid #4b4f9e;box-shadow:inset 0 1px #ffffff16,0 3px 0 #060b21;color:#fff;padding:6px 3px;gap:3px;font-size:.69rem;font-weight:800;line-height:1.13}
-.sound-choice .emoji{font-size:1.38rem}
-.sound-choice[aria-pressed="true"]{background:linear-gradient(150deg,#4a185e,#181442);border:2px solid #ff5cf3;box-shadow:0 0 12px #f735e8a0,inset 0 0 10px #e736c840}
-.game-pad-heading{margin:3px 0 0}
-.game-pad-heading h2{display:none}
-.game-pad-heading .hint{display:none}
-.padgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(6px,1.6vw,11px);width:100%;min-width:0;margin:8px 0}
-.pad{width:100%;min-width:0;min-height:0;aspect-ratio:1 / 1.02;border-radius:12px;padding:12px 3px 5px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;box-shadow:inset 0 2px #ffffff6b,0 4px 0 hsl(var(--hue) 82% 21%),0 0 12px hsl(var(--hue) 100% 48% / .24);border:2px solid hsl(var(--hue) 100% 64%);border-bottom-width:3px;background:linear-gradient(150deg,hsl(var(--hue) 100% 54%),hsl(var(--hue) 95% 36%))}
-.pad small{position:absolute;top:5px;left:7px;font-size:.55rem;opacity:.9;letter-spacing:.02em}
-.pad strong{font-size:clamp(.57rem,2.3vw,.93rem);line-height:1.1;overflow-wrap:anywhere;text-shadow:0 1px 3px #0007}
-.pad .pad-symbol{font-size:clamp(1.1rem,4.5vw,2rem);line-height:1.1;font-weight:700;filter:drop-shadow(0 2px 3px #0004);pointer-events:none}
-.pad:active,.pad.pressed{transform:translateY(3px) scale(.97);filter:brightness(1.18)}
-.game-transport{display:flex;flex-direction:column}
-.game-transport>h2{display:none}
-.game-transport .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;order:2}
-.game-transport .actions button{min-width:0;min-height:56px;padding:7px 3px;border-radius:12px;font-size:.7rem;white-space:normal}
-.game-transport .actions #play{background:linear-gradient(150deg,#0b7e41,#053d34);color:#afffb7;border:2px solid #66ff96;box-shadow:0 0 12px #23ff7845}
-.game-transport .actions #record{background:linear-gradient(150deg,#7e1839,#3c112e);color:#ffadb9;border:2px solid #ff466f}
-.game-transport .actions #stop{background:#151e44;border:2px solid #7488d4;color:#f0f3ff}
-.game-transport .actions #clear{background:#181638;border:2px solid #604d9c;color:#c8bbff}
-.game-transport .stepbar{order:0;margin:2px 0 7px;gap:3px;min-width:0}
-.game-transport .stepbar i{min-width:0;height:17px;background:#4b205b;border-radius:3px}
-.game-transport .stepbar i.on{background:#ff4ee8;box-shadow:0 0 12px #ff4ee8}
-.game-transport .inline{order:1;margin-bottom:9px;justify-content:space-between}
-.game-transport #status{order:3;margin:10px 0 0;font-size:.73rem}
-.game-transport>p.hint{order:4;margin:4px 0 0;font-size:.7rem}
-.game-tracks>h2{font-size:.8rem;letter-spacing:.08em}
-.game-tracks .track{display:flex;flex-wrap:nowrap;gap:6px}
-.game-tracks .track .name{min-width:0;flex:1;overflow-wrap:anywhere}
-.game-tracks .track button{padding:6px;min-height:32px}
-.game-tracks .actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-.game-tracks .actions button,.game-tracks .actions label{min-width:0;text-align:center;padding:9px 4px;font-size:.68rem}
-.game-tracks .actions label{grid-column:1/-1}
-.game-tracks .hint{font-size:.7rem}
-.hud{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 9px;padding:7px 9px;background:#071334;border:1px solid #23467c;border-radius:10px}
-.hud .hud-label{font-size:.64rem;font-weight:900;letter-spacing:.1em;color:#a7b6f1}
-.hud .hud-tempo{display:flex;align-items:center;gap:7px}
-.hud .hud-tempo button{min-height:30px;min-width:30px;padding:2px 7px;border:1px solid #258dd8;background:#0b3566;color:#7ee4ff;font-size:1.1rem}
-.hud #tempo-value{font-weight:900;font-size:1.1rem;font-variant-numeric:tabular-nums}
-@media(min-width:680px){.wrap{padding:20px}.sound-choice{flex-basis:106px}.pad{aspect-ratio:1.45}.pad strong{font-size:1rem}.pad .pad-symbol{font-size:2.2rem}.game-main,.game-transport,.game-tracks{padding:16px}.game-transport .actions button{font-size:.95rem}}
-@media(max-width:390px){.wrap{padding:9px 7px 35px}.game-main,.game-transport,.game-tracks{padding:7px}.sound-choice{flex-basis:73px;font-size:.62rem}.padgrid{gap:5px}.pad{border-radius:9px}.pad strong{font-size:.58rem}.pad small{font-size:.46rem;left:4px}.pad .pad-symbol{font-size:1.2rem}}
-@media(prefers-reduced-motion:reduce){.pad,.sound-choice,.stepbar i{transition:none}}
-</style></head>
+<style>:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#f7f9ff;background:#04091d}*{box-sizing:border-box}html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden}body{background:radial-gradient(ellipse at 50% -15%,#253773 0%,#070d2b 48%,#04091d 85%);min-height:100vh}button,input,select{font:inherit}button{cursor:pointer;color:inherit;touch-action:manipulation}button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px}.wrap{width:100%;max-width:840px;margin:auto;padding:max(20px,env(safe-area-inset-top)) 12px max(35px,env(safe-area-inset-bottom))}header{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:30px}header a{font-size:.75rem;color:#85cfff;text-decoration:none;font-weight:800}header .hint{font-size:.61rem;letter-spacing:.06em;color:#9eacd3}h1{font-size:clamp(1.65rem,7vw,3rem);font-weight:950;letter-spacing:-.055em;line-height:1.05;margin:15px 0 3px;text-transform:uppercase}h1 span{background:linear-gradient(90deg,#71bfff,#c07aff,#fc4fd5);color:transparent;background-clip:text;-webkit-background-clip:text}h1+p{margin:0 0 15px;color:#acbce2;font-size:.81rem}.game-shell{display:flex;flex-direction:column;gap:12px;min-width:0}.game-main,.game-transport,.game-tracks{width:100%;min-width:0;border:1px solid #2755a5;background:linear-gradient(155deg,#101a42,#09112d);border-radius:16px;padding:11px;box-shadow:inset 0 1px #78a6ff26,0 12px 30px #0006}.game-main>h2,.game-pad-heading,.game-transport>h2{display:none}.sound-choices{display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#4153a1 transparent;padding:5px 2px 11px;max-width:100%}.sound-choice{flex:0 0 78px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;padding:7px 3px;border:1px solid #4054a1;border-radius:12px;background:linear-gradient(#202451,#0b1436);font-size:.68rem;font-weight:800;line-height:1.13;box-shadow:0 3px 0 #050a1b}.sound-choice .emoji{font-size:1.35rem}.sound-choice[aria-pressed=true]{border:2px solid #fc58ed;box-shadow:0 0 13px #f43fdda0,inset 0 0 12px #d42dbb40;background:linear-gradient(#421c67,#17113f)}.hud{display:flex;align-items:center;justify-content:space-between;gap:5px;background:#070e2a;border:1px solid #244b8a;border-radius:10px;padding:7px 9px;margin:6px 0 10px}.hud-label{font-size:.65rem;font-weight:850;letter-spacing:.05em;color:#aab9e4}.hud-tempo{display:flex;align-items:center;gap:8px}.hud-tempo button{min-width:30px;min-height:30px;padding:1px 6px;border-radius:9px;border:1px solid #328dd2;background:#12345d;color:#9deaff;font-size:1.2rem}.hud #tempo-value{font-weight:900;font-size:1.05rem}.stepbar{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:3px;margin:0 0 10px;min-width:0}.stepbar i{height:14px;border-radius:3px;background:#532160;transition:background .07s}.stepbar i.on{background:#fa51e9;box-shadow:0 0 12px #f846e6}.padgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(6px,1.5vw,11px);width:100%;min-width:0}.pad{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;width:100%;min-height:0;aspect-ratio:1/1.08;padding:16px 3px 5px;border-radius:12px;border:2px solid hsl(var(--hue) 100% 64%);background:linear-gradient(145deg,hsl(var(--hue) 100% 52%),hsl(var(--hue) 95% 35%));box-shadow:inset 0 2px #ffffff63,0 4px 0 hsl(var(--hue) 80% 19%),0 0 11px hsl(var(--hue) 100% 50% / .28);text-align:center;color:white;text-shadow:0 1px 3px #0006;touch-action:none;user-select:none;-webkit-user-select:none;transition:transform .06s,filter .06s}.pad:active,.pad.pressed{transform:translateY(3px) scale(.97);filter:brightness(1.18)}.pad small{position:absolute;top:5px;left:6px;font-size:.55rem;font-weight:900;opacity:.9}.pad strong{font-size:clamp(.57rem,2.4vw,.93rem);line-height:1.1;overflow-wrap:anywhere}.pad-symbol{font-size:clamp(1.25rem,5vw,2rem);line-height:1.1;font-weight:800;pointer-events:none;filter:drop-shadow(0 2px 3px #0004)}.game-transport .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.game-transport .actions button{min-width:0;min-height:54px;padding:6px 3px;border-radius:12px;font-size:.7rem;font-weight:850;border:2px solid #6c7abf;background:#18214a}.game-transport #play{border-color:#5bff91;background:linear-gradient(#0b8548,#053d33);color:#baffcb;box-shadow:0 0 12px #2dfb7c55}.game-transport #record{border-color:#ff5277;background:linear-gradient(#8a173f,#39122b);color:#ffd0d8}.game-transport #record.active{box-shadow:0 0 18px #ff2c6e99}.game-transport #stop{border-color:#7c8cd7}.game-transport #clear{border-color:#6550a7}.game-transport .inline{display:flex;justify-content:space-between;gap:7px;margin:8px 0;font-size:.75rem;color:#b6c5e9}#counter{font-weight:900}#status{color:#b5ffb0;font-size:.75rem;min-height:20px}.game-transport>p.hint{font-size:.72rem;color:#aab8dc;margin:5px 0 0}.game-tracks h2{font-size:.9rem;letter-spacing:.04em;margin:2px 0 10px}.game-tracks .hint,.empty{color:#aab9dd;font-size:.75rem}.track{display:flex;align-items:center;gap:6px;border-bottom:1px solid #27365c;padding:8px 0}.track .name{flex:1;min-width:0;font-size:.82rem;overflow-wrap:anywhere}.track small{display:block;color:#acb9d9;font-size:.68rem;font-weight:400}.track button{padding:7px;min-height:32px;border:1px solid #53659e;background:#192449;border-radius:8px;font-size:.72rem}.track button.ison{background:#db4b74}.game-tracks .actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.game-tracks .actions button{padding:10px;border:1px solid #3973b7;border-radius:9px;background:#12254b;font-size:.75rem;font-weight:800}.game-tracks .actions button.primary{border-color:#49adff}.game-tracks .actions label{font-size:.74rem;padding:10px}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}@media(max-width:390px){.wrap{padding-left:7px;padding-right:7px}.game-main,.game-transport,.game-tracks{padding:8px}.sound-choice{flex-basis:72px;font-size:.61rem}.padgrid{gap:5px}.pad{border-radius:9px}.pad strong{font-size:.57rem}.pad small{font-size:.48rem}.game-transport .actions button{font-size:.64rem}}@media(min-width:700px){.wrap{padding:25px}.pad{aspect-ratio:1.5}.pad strong{font-size:1rem}.pad-symbol{font-size:2rem}.sound-choice{flex-basis:103px}}@media(prefers-reduced-motion:reduce){.pad,.stepbar i{transition:none}}</style></head>
 <body><main class="wrap">
 <header><a href="./">← Beat Lab Studio</a><span class="hint">QUICK JAM STUDIO · 1.0 PREVIEW</span></header>
 <h1>QUICK JAM <span>STUDIO</span></h1><p>Pick a sound. Hit the pads. Build your loop.</p>
@@ -163,10 +8,10 @@ h1+p{font-size:.77rem;color:#a7b8e6;margin:0 0 12px}
 <div id="sound-choices" class="sound-choices" role="group" aria-label="Choose your sound"></div>
 <div hidden aria-hidden="true"><select id="instrument"><option value="808">808 Drums</option><option value="bounce">Pop Drums</option><option value="hats">Hi-Hats + Perc</option><option value="sub">808 Bass</option><option value="bass">Bouncy Bass</option><option value="hook">Pop Hooks</option><option value="chords">Chord Hits</option><option value="fx">Beat FX</option><option value="acoustic">Acoustic Drums</option><option value="keys">Electric Keys</option><option value="piano">Piano</option><option value="synth">Synth</option><option value="bell">Bells</option><option value="guitar">Guitar</option><option value="organ">Organ</option></select><select id="key"></select><select id="scale"><option value="pent" selected>Pentatonic</option><option value="minor">Minor</option><option value="major">Major</option><option value="chromatic">All notes</option></select><input id="bpm" type="number" min="60" max="180" value="108"><button id="oct-down">−</button><span id="oct-label"></span><button id="oct-up">+</button></div>
 <div class="game-pad-heading"><h2>PLAY THE PADS</h2><p class="hint">Tap to make noise</p></div>
-<div class="hud"><span class="hud-label">BPM</span><div class="hud-tempo"><button type="button" id="tempo-minus" aria-label="Decrease tempo">−</button><span id="tempo-value">108</span><button type="button" id="tempo-plus" aria-label="Increase tempo">+</button></div><span class="hud-label">16 STEP LOOP</span></div><div id="pads" class="padgrid" aria-label="Playable instrument pads"></div></section>
+<div class="hud"><span class="hud-label">BPM</span><div class="hud-tempo"><button type="button" id="tempo-minus" aria-label="Decrease tempo">−</button><span id="tempo-value">108</span><button type="button" id="tempo-plus" aria-label="Increase tempo">+</button></div><span class="hud-label">16 STEP LOOP</span></div><div id="steps" class="stepbar" aria-hidden="true"></div><div id="pads" class="padgrid" aria-label="Playable instrument pads"></div></section>
 <section class="game-transport"><h2>LOOP CONTROL</h2><div class="actions">
 <button id="play" class="primary">▶ Play loop</button><button id="record" class="rec">● Record</button><button id="stop">■ Stop</button><button id="clear">New jam</button>
-</div><div id="steps" class="stepbar" aria-hidden="true"></div><div class="inline"><span class="hint">1 bar · 16 steps · </span><span id="counter">01 / 16</span></div><p id="status" role="status" aria-live="polite">Tap a pad to enable sound. Record to capture your first layer.</p><p class="hint">Record a layer, switch sounds, then record another.</p></section>
+</div><div class="inline"><span class="hint">1 bar · 16 steps · </span><span id="counter">01 / 16</span></div><p id="status" role="status" aria-live="polite">Tap a pad to enable sound. Record to capture your first layer.</p><p class="hint">Record a layer, switch sounds, then record another.</p></section>
 <section class="game-tracks"><h2>YOUR LAYERS <span id="count" class="hint">(0)</span></h2><div id="tracks"><p class="empty">No layers yet. Pick an instrument and record your first loop.</p></div><div class="actions" style="margin-top:14px"><button id="save" class="primary">Save jam</button><button id="load">Load saved jam</button><button id="export">Export backup</button><label class="hint" style="cursor:pointer">Import backup <input class="sr" type="file" id="import" accept=".json,application/json"></label></div><p class="hint">Save stores this jam on this browser. Export a backup to keep it if browser data is cleared. Audio export and transfer to Beat Lab Studio are not included yet.</p></section>
 </div></main>
 <script type="module">
@@ -183,7 +28,7 @@ const percussionNames={bounce:['Punch Kick','Pop Snare','Clap','Snap','Shaker','
 function padName(s,p){if(percussionNames[s.instrument])return percussionNames[s.instrument][p];if(['808','acoustic'].includes(s.instrument))return drums[p];if(s.instrument==='chords')return ['Bright 1','Bright 2','Bright 3','Bright 4','Warm 1','Warm 2','Warm 3','Warm 4','Dream 1','Dream 2','Dream 3','Dream 4','Stab 1','Stab 2','Stab 3','Stab 4'][p];const midi=getMidi(s,p);return roots[((midi%12)+12)%12]+(Math.floor(midi/12)-1)}
 const soundOptions=[['808','🥁','808 Drums'],['bounce','💥','Pop Drums'],['hats','✨','Hi-Hats + Perc'],['sub','🔊','808 Bass'],['bass','🫧','Bouncy Bass'],['hook','🌈','Pop Hooks'],['chords','🎶','Chord Hits'],['fx','⚡','Beat FX']];
 function renderSounds(){const box=$('sound-choices');box.replaceChildren();for(const [id,emoji,name] of soundOptions){const b=document.createElement('button');b.type='button';b.className='sound-choice';b.setAttribute('aria-pressed',String($('instrument').value===id));const pic=document.createElement('span');pic.className='emoji';pic.textContent=emoji;const label=document.createElement('span');label.textContent=name;b.append(pic,label);b.onclick=()=>{if(rec||recordPending)finishRecord();$('instrument').value=id;renderSounds();renderPads();tell('Playing '+name+' · tap a pad')};box.append(b)}}
-function renderPads(){const s=settings();$('pads').replaceChildren();padButtons.length=0;for(let i=0;i<16;i++){const b=document.createElement('button');b.className='pad';b.style.setProperty('--hue',String((i*31+145)%360));b.type='button';b.innerHTML='<small>PAD '+String(i+1).padStart(2,'0')+'</small>';const symbols=['◉','▤','✧','◌','✦','▥','◇','◍','◎','✳','✺','⌁','◈','▦','ϟ','≋'];const symbol=document.createElement('span');symbol.className='pad-symbol';symbol.setAttribute('aria-hidden','true');symbol.textContent=symbols[i];const strong=document.createElement('strong');strong.textContent=padName(s,i);b.append(symbol,strong);b.setAttribute('aria-label','Play '+padName(s,i));b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add('pressed');void press(i,s)});const release=()=>{b.classList.remove('pressed');lift(i)};b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);b.addEventListener('lostpointercapture',release);padButtons.push(b);$('pads').append(b)}}
+function renderPads(){const s=settings();$('pads').replaceChildren();padButtons.length=0;for(let i=0;i<16;i++){const b=document.createElement('button');b.className='pad';b.style.setProperty('--hue',String((i*31+145)%360));b.type='button';b.innerHTML='<small>PAD '+String(i+1).padStart(2,'0')+'</small>';const symbols=['◉','▤','♩','♫','✦','▥','◇','◍','◎','✳','✺','⌁','◈','▦','ϟ','≋'];const symbol=document.createElement('span');symbol.className='pad-symbol';symbol.setAttribute('aria-hidden','true');symbol.textContent=symbols[i];const strong=document.createElement('strong');strong.textContent=padName(s,i);b.append(symbol,strong);b.setAttribute('aria-label','Play '+padName(s,i));b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add('pressed');void press(i,s)});const release=()=>{b.classList.remove('pressed');lift(i)};b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);b.addEventListener('lostpointercapture',release);padButtons.push(b);$('pads').append(b)}}
 async function audio(){if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('This browser does not support audio');ctx=new AC();master=ctx.createGain();master.gain.value=.66;const limiter=ctx.createDynamicsCompressor();master.connect(limiter);limiter.connect(ctx.destination);noise=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const d=noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}await ctx.resume()}
 function osc(freq,t,d,type='sine',vol=.25,slide=null,dest=master){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(Math.max(1,freq),t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(1,slide),t+Math.min(d*.7,.3));g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.001,vol),t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(dest);o.start(t);o.stop(t+d+.02)}
 function hiss(t,d,filter,cut,vol){const o=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.buffer=noise;f.type=filter;f.frequency.value=cut;g.gain.setValueAtTime(Math.max(.001,vol),t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(f);f.connect(g);g.connect(master);o.start(t);o.stop(t+d+.02)}
